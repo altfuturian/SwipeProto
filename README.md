@@ -1,2 +1,2 @@
 # SwipeProto
-Prototype of Categorical Data Assignments
+Prototype of Assigning Categorical Data 
