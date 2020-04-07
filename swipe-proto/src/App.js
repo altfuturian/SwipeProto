@@ -15,10 +15,10 @@ class App extends Component {
   }
 
   componentDidMount() {
-    //this.funcAuthListener();
+    this.funcAuthListener();
   }
 
-  /*
+  
   funcAuthListener = () => {
     firebase.auth().onAuthStateChanged((user) => {
       if(user) {
@@ -29,12 +29,11 @@ class App extends Component {
       }
     })
   }
-*/ 
   render() {
     return (
-      <React.Fragment>
-        
-      </React.Fragment>
+      <div>
+        {this.state.user ? (<Home/>) : (<Login/>) }
+      </div>
     );
   }
 }

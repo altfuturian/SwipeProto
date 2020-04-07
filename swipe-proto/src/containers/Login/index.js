@@ -29,12 +29,12 @@ class Login extends Component {
 
     funcLogin = (e) => {
         e.preventDefault();
-        //operation.LOGIN(this.state.email, this.state.password);
+        operation.LOGIN(this.state.email, this.state.password);
     }
 
     funcSignUp = (e) => {
         e.preventDefault();
-        //operation.SIGNUP(this.state.email, this.state.password);
+        operation.SIGNUP(this.state.email, this.state.password);
     }
 
     funcHandleChange = (e) => {
