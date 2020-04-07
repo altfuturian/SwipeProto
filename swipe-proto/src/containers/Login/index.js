@@ -4,14 +4,19 @@
 /*******************************************/
 
 import React, { Component } from 'react';
+import { operation } from './redux/index'
 import { Container, Row, Col, Button, Image, Form } from 'react-bootstrap';
+import firebase from './../../config/Firebase'
 import './style.css';
 
 class Login extends Component {
     constructor(props) {
         super(props);
+        
         this.state = {
-            loadSignUp: false
+            loadSignUp: false,
+            email: "1",
+            password: "2"
         };
     }
 
@@ -20,6 +25,22 @@ class Login extends Component {
             loadSignUp: !this.state.loadSignUp
         });
         console.log("RENDER: ", this.state.loadSignUp);
+    }
+
+    funcLogin = (e) => {
+        e.preventDefault();
+        //operation.LOGIN(this.state.email, this.state.password);
+    }
+
+    funcSignUp = (e) => {
+        e.preventDefault();
+        //operation.SIGNUP(this.state.email, this.state.password);
+    }
+
+    funcHandleChange = (e) => {
+        this.setState({
+            [e.target.name]: e.target.value
+        })
     }
 
     render() {
@@ -63,7 +84,14 @@ class Login extends Component {
                                     <Form.Group controlId="password">
                                         <Form.Control type="password" placeholder="Password" />
                                     </Form.Group>
-                                    <Button variant="primary" type="submit" className="mt-5" block>Submit</Button>
+                                    <Button
+                                        variant="primary"
+                                        type="submit"
+                                        className="mt-5"
+                                        onClick={this.funcLogin}
+                                        block>
+                                        Login
+                                    </Button>
                                 </Form>
                             </Container>
                             :
@@ -79,7 +107,7 @@ class Login extends Component {
                                     <Form.Group controlId="password">
                                         <Form.Control type="password" placeholder="Confirm password" />
                                     </Form.Group>
-                                    <Button variant="primary" type="submit" className="mt-5" block>Submit</Button>
+                                    <Button variant="primary" type="submit" className="mt-5" block>Proceed</Button>
                                 </Form>
                             </Container>
                         }
