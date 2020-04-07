@@ -1,0 +1,70 @@
+body {
+    overflow-y: hidden;
+}
+
+.main-container {
+    min-height: 100vh;
+}
+
+.main-content {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: 
+        linear-gradient(
+        rgb(100, 185, 255, 0.15), 
+        rgba(100, 185, 255, 0.15)
+        ),
+        url('../../assets/login.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
+.main-content .container{
+    margin-top: auto;
+    margin-bottom: 20%;
+}
+
+.main-content .container .col h1,
+.main-content .container .col  p {
+    color: #fff;
+}
+
+@media (max-width: 1600px) {
+    .side-content img {
+        max-width: 180px;
+    }
+}
+
+@media (max-width: 1200px){
+    .side-content img {
+        max-width: 150px;
+    }
+}
+
+.side-content .container:first-child {
+    border-bottom: 1px solid rgba(122, 122, 122, 0.685);
+    padding: 50px;
+    padding-bottom: 10px;
+}
+
+.side-content .container:first-child .col {
+    padding: 0;
+}
+
+.side-content .container:first-child .col button{
+    margin: 40px 0 20px 0;
+}
+
+.side-content .container:nth-child(2) {
+    padding: 10px 50px;
+}
+
+.side-content .container:nth-child(2) button{
+    margin-top: 60px;
+}
+
+.side-content .container:nth-child(2) form{
+    margin-top: 40px;
+}
