@@ -1,26 +1,140 @@
+body {
+    overflow-x: hidden;
+  }
+
 .main-container {
-    height: 100vh;
+    max-height: 100vh;
+    background-color: rgb(226, 226, 226);
+    padding: 0px;
+    margin: 0px;
 }
 
 .header-category,
-.header-comment {
+.header-comment,
+.header-profile {
     background-color: rgb(99, 99, 99);
     color: #fff;
     padding: 10px 0px;
+    height: 65px;
+}
+
+.header-category h3,
+.header-comment h3 {
+    margin: 5px;
 }
 
 .content-category {
     background-color: blueviolet;
-    height: 80vh;
+    height: 79vh;
+    padding: 20px 0px;
 }
 
 .card-category {
-    height: 70px;
+    height: 75px;
 }
 
 .footer-category {
-    height: 70px;
+    height: 85px;
+    background-color: white;
 }
 
-.btn-generate {
+/* Comment */
+.comment-user-avatar {
+    width: 45px;
+    height: 45px;
+    background-color: red;
+    border-radius: 50%;
+    margin-left: auto;
+}
+
+.content-comment{
+    background-color: blueviolet;
+    padding: 20px 0px !important;
+    height: 66vh;
+}
+
+.card-comment {
+    margin-bottom: 10px;
+}
+
+.comment-avatar {
+    width: 40px;
+    height: 40px;
+    background-color: green;
+    border-radius: 50%;
+    margin: 0px auto;
+}
+
+.card-comment .card-title {
+    font-size: 16px;
+}
+
+.card-comment .card-subtitle {
+    font-size: 12px;
+    color: rgb(87, 87, 87);
+}
+
+.card-comment .card-text {
+    font-size: 14px;
+}
+
+.footer-comment {
+    padding: 20px 0px;
+    background-color: red;
+    height: 150px,
+}
+
+/* Profile */
+.header-profile {
+    background-color: rgb(99, 99, 99);
+    color: #fff;
+    padding: 10px 0px;
+    height: 150px;
+}
+
+.container-profile {
+    position: relative;
+}
+
+.back-profile {
+    position: absolute;
+}
+
+.profile-user-avatar {
+    width: 100px;
+    height: 100px;
+    background-color: red;
+    border-radius: 50%;
+    margin: 0px auto;
+}
+
+.content-user h5{
+    text-align: center;
+}
+
+.content-profile {
+    background-color: white;
+}
+
+.nav-tabs {
+    width: 100%;
+}
+
+.nav-tabs .nav-link {
+    width: 50%;
+}
+.nav-tabs .nav-link:hover {
+    border-color: #fff #fff #dee2e6;
+}
+.nav-tabs .nav-link:focus {
+    border-color: #fff #fff #dee2e6;
+}
+
+.nav-tabs .nav-link.active{
+    border-color: #fff #fff red;
+    border-bottom-width: 2px;
+}
+
+.content-like {
+    height: 73vh;
 }

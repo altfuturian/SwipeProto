@@ -38,7 +38,7 @@ const CATEGORY_LIST = ({categories}) => {
                     </div>
                 </Col>
             </section>
-            <section className="content-category p-3">
+            <section className="content-category overflow-auto">
                 <LOAD_CONTENT
                     list={categories}
                 />
