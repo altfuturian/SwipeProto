@@ -1,0 +1,26 @@
+.main-container {
+    height: 100vh;
+}
+
+.header-category,
+.header-comment {
+    background-color: rgb(99, 99, 99);
+    color: #fff;
+    padding: 10px 0px;
+}
+
+.content-category {
+    background-color: blueviolet;
+    height: 80vh;
+}
+
+.card-category {
+    height: 70px;
+}
+
+.footer-category {
+    height: 70px;
+}
+
+.btn-generate {
+}
