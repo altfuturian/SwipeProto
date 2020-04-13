@@ -110,11 +110,6 @@ class Dashboard extends Component {
                         />
                     </Col>
                     <Col className="content">
-                        <section>
-                            <div className="main-header">
-                                Header
-                            </div>
-                        </section>
                         <Content />
                     </Col>
                     <Col className="col-3 comment">
