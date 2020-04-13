@@ -1,10 +1,9 @@
 import React from 'react';
 import { Row, Col, Container, Card, Button, Form } from 'react-bootstrap';
+import TimeAgo from 'react-timeago';
 import PROFILE from './Profile';
 
 const LOAD_LIST = ({ list }) => {
-
-    console.log(list)
     return (
         <Container>
             {list && list.map((comment, index) => {
@@ -17,7 +16,7 @@ const LOAD_LIST = ({ list }) => {
                                 </Col>
                                 <Col className="pl-0">
                                     <Card.Title>{comment.username}</Card.Title>
-                                    <Card.Subtitle>{comment.datetime}</Card.Subtitle>
+                                    <Card.Subtitle><TimeAgo date={comment.datetime} /></Card.Subtitle>
                                     <Card.Text>{comment.comment}</Card.Text>
                                 </Col>
                             </Row>
@@ -61,17 +60,26 @@ const COMMENT_LIST = (props) => {
                         <Container>
                             <Form>
                                 <Form.Group>
-                                    <Form.Control as="textarea" rows="3" placeholder="Enter something" />
+                                    <Form.Control
+                                        as="textarea"
+                                        rows="3"
+                                        placeholder="Enter something"
+                                        onChange={props.funcOnCommentChange.bind(this)}
+                                        value={props.commentInput}
+                                    />
                                 </Form.Group>
-
-                                <Button variant="primary" type="submit" className="w-100"> Save Comment </Button>
                             </Form>
+                                <Button
+                                    variant="primary"
+                                    className="w-100"
+                                    onClick={props.funcOnSubmitComment}> Save Comment
+                                </Button>
                         </Container>
                     </section>
                 </React.Fragment>
                 :
                 <PROFILE
-                    funcOnClickProfile={props.funcOnClickProfile}
+                    {...props}
                 />
             }
 

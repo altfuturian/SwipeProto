@@ -12,40 +12,21 @@ class Dashboard extends Component {
         super(props);
         this.state = {
             hideProfile: true,
+            selectedCategories: [],
+            activeTab: 'likes',
+            commentInput: '',
             categories: [
-                { name: "one" },
-                { name: "two" },
-                { name: "three" },
-                { name: "four" },
-                { name: "five" },
-                { name: "six" },
-                { name: "seven" },
-                { name: "one" },
-                { name: "two" },
-                { name: "three" },
-                { name: "four" },
-                { name: "five" },
-                { name: "six" },
-                { name: "seven" },
-                { name: "one" },
-                { name: "two" },
-                { name: "three" },
-                { name: "four" },
-                { name: "five" },
-                { name: "six" },
-                { name: "seven" },
-                { name: "one" },
-                { name: "two" },
-                { name: "three" },
-                { name: "four" },
-                { name: "five" },
-                { name: "six" },
-                { name: "seven" }
+                { id: 0, name: "Hello darkness my old friend" },
+                { id: 1, name: "two" },
+                { id: 2, name: "three" },
+                { id: 3, name: "four" },
+                { id: 4, name: "five" },
+                { id: 5, name: "six" }
             ],
             comments: [
                 {
                     username: "John Doe 1",
-                    comment: "A whole new world",
+                    comment: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur in mauris neque. Maecenas at nisl sit amet augue sollicitudin convallis. Sed et felis maximus, ultrices libero non, mattis diam. ",
                     datetime: "Wed Apr 08 2020 10:56:20 GMT+0800 (China Standard Time)"
                 },
                 {
@@ -63,14 +44,56 @@ class Dashboard extends Component {
                     comment: "A whole new world",
                     datetime: "Wed Apr 08 2020 10:56:20 GMT+0800 (China Standard Time)"
                 }
+            ],
+            likes: [
+                {category_id: 1, title: "Kimetsu No Yaiba", subtitle: "Demon Slayer", category: "Anime", type: "like"},
+                {category_id: 2, title: "Avengers", subtitle: "Endgame", category: "Movie", type: "dislike"}
             ]
         }
+    }
+
+    funcOnSelectCategory = (category) => {
+        const selectedCategories = this.state.selectedCategories;
+
+        if (selectedCategories.includes(category)) {
+            const newSelection = selectedCategories
+                .filter(selectedCategory => selectedCategory.id !== category.id);
+
+            this.setState({
+                selectedCategories: newSelection
+            })
+        } else {
+            this.setState({
+                selectedCategories: [...this.state.selectedCategories, category]
+            });
+        }
+
+    }
+
+    funcOnGenerateItems = () => {
+        console.log("GENERATED!");
+    }
+
+    funcOnCommentChange = (ev) => {
+        this.setState({
+            commentInput: ev.target.value
+        })
+    }
+
+    funcOnSubmitComment = () => {
+        console.log("COMMENT: ", this.state.commentInput)
     }
 
     funcOnClickProfile = () => {
         this.setState({
             hideProfile: !this.state.hideProfile
         });
+    }
+
+    funcOnChangeTab = (e) => {
+        this.setState({
+            activeTab: e
+        })
     }
 
 
@@ -81,16 +104,26 @@ class Dashboard extends Component {
                     <Col className="col-3 m-0 category">
                         <CATEGORY_LIST
                             categories={this.state.categories}
+                            funcOnSelectCategory={this.funcOnSelectCategory.bind(this)}
+                            selectedCategories={this.state.selectedCategories}
+                            funcOnGenerateItems={this.funcOnGenerateItems.bind(this)}
                         />
                     </Col>
                     <Col className="content">
+                        <section>
+                            <div className="main-header">
+                                Header
+                            </div>
+                        </section>
                         <Content />
                     </Col>
                     <Col className="col-3 comment">
                         <COMMENT_LIST
-                            hideProfile={this.state.hideProfile}
-                            comments={this.state.comments}
+                            {...this.state}
+                            funcOnCommentChange={this.funcOnCommentChange.bind(this)}
+                            funcOnSubmitComment={this.funcOnSubmitComment.bind(this)}
                             funcOnClickProfile={this.funcOnClickProfile.bind(this)}
+                            funcOnChangeTab={this.funcOnChangeTab.bind(this)}
                         />
                     </Col>
                 </Row>
