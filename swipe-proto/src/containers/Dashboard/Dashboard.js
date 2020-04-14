@@ -5,12 +5,13 @@ import './style.css';
 // Components
 import CATEGORY_LIST from './CategoryList'
 import COMMENT_LIST from './CommentList'
-import Content from './Content'
+import CONTENT from './Content'
 
 class Dashboard extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            value: "hello",
             hideProfile: true,
             selectedCategories: [],
             activeTab: 'likes',
@@ -46,8 +47,30 @@ class Dashboard extends Component {
                 }
             ],
             likes: [
-                {category_id: 1, title: "Kimetsu No Yaiba", subtitle: "Demon Slayer", category: "Anime", type: "like"},
-                {category_id: 2, title: "Avengers", subtitle: "Endgame", category: "Movie", type: "dislike"}
+                { category_id: 1, title: "Kimetsu No Yaiba", subtitle: "Demon Slayer", category: "Anime", type: "like" },
+                { category_id: 2, title: "Avengers", subtitle: "Endgame", category: "Movie", type: "dislike" }
+            ],
+            resources: [
+                {
+                    id: "6g5ewhmgo9",
+                    title: "Ugh, There's Just Nothing To Do!",
+                    subtitle: "April 13, 2020",
+                    description: "got bored. made a vid all by my lonesome self. ugh, there's just nothing to do.",
+                    res_url: "https://www.youtube.com/embed/KSD2d8uU6Mo",
+                    type: "video",
+                    liked: false,
+                    dislike: false
+                },
+                {
+                    id: "t9pk85cwp7",
+                    title: "Drawing EPIC Kimetsu No Yaiba Splash Page! Anime Manga Sketch",
+                    subtitle: "July 5, 2019",
+                    description: "got bored. made a vid all by my lonesome self. ugh, there's just nothing to do.",
+                    res_url: "https://www.youtube.com/embed/fEq5nvvVQ1g?controls=0",
+                    type: "video",
+                    liked: false,
+                    dislike: false
+                },
             ]
         }
     }
@@ -96,8 +119,38 @@ class Dashboard extends Component {
         })
     }
 
+    funcOnSwipeLike = (e) => {
+        /*
+        const resources = [...this.state.resources];;
+        let index, newResource;
+
+        for(var i = 0; i < resources.length; i++) {
+            if(resources[i]["id"] === e.id) {
+                index = i;
+                newResource = {
+                    ...resources[i],
+                    liked: true
+                }
+                break;
+            }
+        }
+        resources[index] = newResource;
+
+        console.log("HERE", e);
+        this.setState({
+            resources: resources
+        }, () => console.log("RS: ", this.state.resources)
+        )
+        */
+    }
+
+    funcOnSwipeDisLike = (e) => {
+        
+    }
+
 
     render() {
+        console.log("VAL: ", this.state.value)
         return (
             <section className="main-container">
                 <Row>
@@ -110,7 +163,11 @@ class Dashboard extends Component {
                         />
                     </Col>
                     <Col className="content">
-                        <Content />
+                        <CONTENT
+                            resources={this.state.resources}
+                            funcOnSwipeLike={this.funcOnSwipeLike.bind(this)}
+                            funcOnSwipeDisLike={this.funcOnSwipeDisLike.bind(this)}
+                        />
                     </Col>
                     <Col className="col-3 comment">
                         <COMMENT_LIST
