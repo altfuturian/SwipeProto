@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import { Row, Col } from 'react-bootstrap';
+import { connect } from 'react-redux';
+import { firestoreConnect } from 'react-redux-firebase';
+import { compose } from 'redux';
 import './style.css';
 
 // Components
@@ -16,14 +19,7 @@ class Dashboard extends Component {
             activeTab: 'likes',
             commentInput: '',
             activeResource: '',
-            categories: [
-                { id: 0, name: "Hello darkness my old friend" },
-                { id: 1, name: "two" },
-                { id: 2, name: "three" },
-                { id: 3, name: "four" },
-                { id: 4, name: "five" },
-                { id: 5, name: "six" }
-            ],
+            categories: props.categories,
             comments: [
                 {
                     username: "John Doe 1",
@@ -173,4 +169,9 @@ class Dashboard extends Component {
     }
 }
 
-export default Dashboard;
+const mapStateToProps = (state) => {
+    return {
+        categories: state.dashboard.categories
+    }
+}
+export default connect(mapStateToProps)(Dashboard);

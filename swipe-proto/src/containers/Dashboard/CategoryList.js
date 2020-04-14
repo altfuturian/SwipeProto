@@ -4,38 +4,40 @@ import { Row, Col, Card, Container, Button } from 'react-bootstrap';
 const LOAD_CONTENT = (props) => {
     let grid = [];
 
-    for (let i = 0; i < props.list.length; i) {
-        let columns = [];
-
-        for (let y = 0; y < 3; y++) {
-            let cardClass = 'card-category';
-
-            for (let a = 0; a < props.selectedCategories.length; a++) {
-                if (props.selectedCategories[a]["id"] === props.list[i]["id"]) {
-                    cardClass = cardClass.concat(' category-active');
-                    break;
+    if(props.list) {
+        for (let i = 0; i < props.list.length; i) {
+            let columns = [];
+    
+            for (let y = 0; y < 3; y++) {
+                let cardClass = 'card-category';
+    
+                for (let a = 0; a < props.selectedCategories.length; a++) {
+                    if (props.selectedCategories[a]["id"] === props.list[i]["id"]) {
+                        cardClass = cardClass.concat(' category-active');
+                        break;
+                    }
                 }
+    
+                if (i < props.list.length) {
+                    columns.push(
+                        <Col className="col-4" key={props.list[i]["name"]}>
+                            <Card
+                                className={cardClass}
+                                onClick={props.funcOnSelectCategory.bind(this, props.list[i])}
+                            >
+                                <Card.Body className="d-inline-block align-items-center text-truncate">
+                                    {props.list[i]["name"]}
+                                </Card.Body>
+                            </Card>
+                        </Col>
+                    )
+                }
+                i++;
             }
-
-            if (i < props.list.length) {
-                columns.push(
-                    <Col className="col-4" key={props.list[i]["name"]}>
-                        <Card
-                            className={cardClass}
-                            onClick={props.funcOnSelectCategory.bind(this, props.list[i])}
-                        >
-                            <Card.Body className="d-inline-block align-items-center text-truncate">
-                                {props.list[i]["name"]}
-                            </Card.Body>
-                        </Card>
-                    </Col>
-                )
-            }
-            i++;
+            grid.push(<Container><Row className="mb-3">{columns}</Row></Container>)
         }
-        grid.push(<Container><Row className="mb-3">{columns}</Row></Container>)
     }
-
+    
     return grid;
 }
 
