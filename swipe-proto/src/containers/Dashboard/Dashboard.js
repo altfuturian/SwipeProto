@@ -5,17 +5,17 @@ import './style.css';
 // Components
 import CATEGORY_LIST from './CategoryList'
 import COMMENT_LIST from './CommentList'
-import CONTENT from './Content'
+import SWIPE_LIST from './SwipeList'
 
 class Dashboard extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            value: "hello",
             hideProfile: true,
             selectedCategories: [],
             activeTab: 'likes',
             commentInput: '',
+            activeResource: '',
             categories: [
                 { id: 0, name: "Hello darkness my old friend" },
                 { id: 1, name: "two" },
@@ -28,22 +28,26 @@ class Dashboard extends Component {
                 {
                     username: "John Doe 1",
                     comment: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur in mauris neque. Maecenas at nisl sit amet augue sollicitudin convallis. Sed et felis maximus, ultrices libero non, mattis diam. ",
-                    datetime: "Wed Apr 08 2020 10:56:20 GMT+0800 (China Standard Time)"
+                    datetime: "Wed Apr 08 2020 10:56:20 GMT+0800 (China Standard Time)",
+                    res_id: "6g5ewhmgo9"
                 },
                 {
                     username: "John Doe 2",
                     comment: "A whole new world",
-                    datetime: "Wed Apr 08 2020 10:56:20 GMT+0800 (China Standard Time)"
+                    datetime: "Wed Apr 08 2020 10:56:20 GMT+0800 (China Standard Time)",
+                    res_id: "6g5ewhmgo9"
                 },
                 {
                     username: "John Doe 3",
                     comment: "A whole new world",
-                    datetime: "Wed Apr 08 2020 10:56:20 GMT+0800 (China Standard Time)"
+                    datetime: "Wed Apr 08 2020 10:56:20 GMT+0800 (China Standard Time)",
+                    res_id: "t9pk85cwp7"
                 },
                 {
                     username: "John Doe 4",
                     comment: "A whole new world",
-                    datetime: "Wed Apr 08 2020 10:56:20 GMT+0800 (China Standard Time)"
+                    datetime: "Wed Apr 08 2020 10:56:20 GMT+0800 (China Standard Time)",
+                    res_id: "t9pk85cwp7"
                 }
             ],
             likes: [
@@ -119,38 +123,23 @@ class Dashboard extends Component {
         })
     }
 
-    funcOnSwipeLike = (e) => {
-        /*
-        const resources = [...this.state.resources];;
-        let index, newResource;
-
-        for(var i = 0; i < resources.length; i++) {
-            if(resources[i]["id"] === e.id) {
-                index = i;
-                newResource = {
-                    ...resources[i],
-                    liked: true
-                }
-                break;
-            }
-        }
-        resources[index] = newResource;
-
-        console.log("HERE", e);
+    funcActiveResource = (resource) => {
         this.setState({
-            resources: resources
-        }, () => console.log("RS: ", this.state.resources)
-        )
-        */
+            activeResource: resource.id
+        })
     }
 
-    funcOnSwipeDisLike = (e) => {
-        
+    funcOnSwipeLike  = (resource) => {
+        console.log("RIGHT", resource);
+        this.funcActiveResource(resource);
     }
 
+    funcOnSwipeDisLike = (resource) => {
+        console.log("LEFT", resource);
+        this.funcActiveResource(resource);
+    }
 
     render() {
-        console.log("VAL: ", this.state.value)
         return (
             <section className="main-container">
                 <Row>
@@ -163,7 +152,7 @@ class Dashboard extends Component {
                         />
                     </Col>
                     <Col className="content">
-                        <CONTENT
+                        <SWIPE_LIST
                             resources={this.state.resources}
                             funcOnSwipeLike={this.funcOnSwipeLike.bind(this)}
                             funcOnSwipeDisLike={this.funcOnSwipeDisLike.bind(this)}

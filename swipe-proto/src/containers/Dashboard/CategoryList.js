@@ -43,13 +43,11 @@ const CATEGORY_LIST = (props) => {
     return (
         <React.Fragment>
             <section className="header-category text-center">
-                <Col>
-                    <div>
-                        <Container>
-                            <h3> Categories </h3>
-                        </Container>
-                    </div>
-                </Col>
+                <div>
+                    <Container>
+                        <h3> Categories </h3>
+                    </Container>
+                </div>
             </section>
             <section className="content-category overflow-auto">
                 <LOAD_CONTENT
