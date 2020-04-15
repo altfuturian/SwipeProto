@@ -2,7 +2,10 @@ import React, { Component } from 'react';
 import { Row, Col } from 'react-bootstrap';
 import './style.css';
 
-// Components
+import { db } from './../../config/Firebase'
+
+import * as tbl from './../constants'
+
 import CATEGORY_LIST from './CategoryList'
 import COMMENT_LIST from './CommentList'
 import SWIPE_LIST from './SwipeList'
@@ -15,15 +18,8 @@ class Dashboard extends Component {
             selectedCategories: [],
             activeTab: 'likes',
             commentInput: '',
-            activeResource: '',
-            categories: [
-                { id: 0, name: "Hello darkness my old friend" },
-                { id: 1, name: "two" },
-                { id: 2, name: "three" },
-                { id: 3, name: "four" },
-                { id: 4, name: "five" },
-                { id: 5, name: "six" }
-            ],
+            activeResource: null,
+            categories: [],
             comments: [
                 {
                     username: "John Doe 1",
@@ -54,33 +50,46 @@ class Dashboard extends Component {
                 { category_id: 1, title: "Kimetsu No Yaiba", subtitle: "Demon Slayer", category: "Anime", type: "like" },
                 { category_id: 2, title: "Avengers", subtitle: "Endgame", category: "Movie", type: "dislike" }
             ],
-            resources: [
-                {
-                    id: "6g5ewhmgo9",
-                    title: "Ugh, There's Just Nothing To Do!",
-                    subtitle: "April 13, 2020",
-                    description: "got bored. made a vid all by my lonesome self. ugh, there's just nothing to do.",
-                    res_url: "https://www.youtube.com/embed/KSD2d8uU6Mo",
-                    type: "video",
-                    liked: false,
-                    dislike: false
-                },
-                {
-                    id: "t9pk85cwp7",
-                    title: "Drawing EPIC Kimetsu No Yaiba Splash Page! Anime Manga Sketch",
-                    subtitle: "July 5, 2019",
-                    description: "got bored. made a vid all by my lonesome self. ugh, there's just nothing to do.",
-                    res_url: "https://www.youtube.com/embed/fEq5nvvVQ1g?controls=0",
-                    type: "video",
-                    liked: false,
-                    dislike: false
-                },
-            ]
+            resources: []
         }
     }
 
     componentDidMount = () => {
-        //this.fetchCategories(this.state.selectedCategories);
+        this.funcFetchCategories();
+    }
+
+    funcFetchCategories = () => {
+        db.collection(tbl.CATEGORIES)
+            .get()
+            .then((querySnapshot) => {
+                let categories = [];
+                querySnapshot.forEach(function (doc) {
+                    let category = doc.data();
+                    category.id = doc.id;
+                    categories.push(category)
+                });
+                this.setState({ categories: categories },
+                    () => {
+                        this.funcOnGenerateItems();
+                    })
+            })
+    }
+
+    funcFetchResources = (resRef) => {
+        resRef
+            .get()
+            .then((querySnapshot) => {
+                let resources = [];
+                querySnapshot.forEach(function (doc) {
+                    let resource = doc.data();
+                    resource.id = doc.id;
+                    resources.push(resource)
+                });
+                this.setState({ 
+                    resources: resources,
+                    activeResource: resources[resources.length - 1]["id"]
+                })
+            })
     }
 
     funcOnSelectCategory = (category) => {
@@ -102,7 +111,18 @@ class Dashboard extends Component {
     }
 
     funcOnGenerateItems = () => {
-        console.log("GENERATED!");
+        let resRef = db.collection(tbl.RESOURCES);
+
+        if (Array.isArray(this.state.selectedCategories)
+            && this.state.selectedCategories.length) {
+            let selection = [];
+            this.state.selectedCategories.forEach(function (category) {
+                selection.push(category.id);
+            })
+            this.funcFetchResources(resRef.where('categoryid', 'in', selection))
+        } else {
+            this.funcFetchResources(resRef)
+        }
     }
 
     funcOnCommentChange = (ev) => {
@@ -133,7 +153,7 @@ class Dashboard extends Component {
         })
     }
 
-    funcOnSwipeLike  = (resource) => {
+    funcOnSwipeLike = (resource) => {
         console.log("RIGHT", resource);
         this.funcActiveResource(resource);
     }
@@ -144,7 +164,7 @@ class Dashboard extends Component {
     }
 
     render() {
-        console.log(this.props)
+        console.log("RENDER")
         return (
             <section className="main-container">
                 <Row>

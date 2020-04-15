@@ -2,7 +2,6 @@ import React from 'react';
 import { Row, Col, Card, Container, Button } from 'react-bootstrap';
 
 const LOAD_CONTENT = (props) => {
-    console.log("LOAD: ", props)
     let grid = [];
 
     if(props.list) {

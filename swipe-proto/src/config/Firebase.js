@@ -1,7 +1,7 @@
 import * as fbConfig from 'firebase';
 import 'firebase/firestore'
 
-const settings = {timestampsInSnapshots: true};
+//const settings = {timestampsInSnapshots: true};
 
 const config = {
     apiKey: "AIzaSyDrotSPX5TCqpn7GG7xMh6fGHyd6VqqCds",
@@ -16,6 +16,6 @@ const config = {
 
 fbConfig.initializeApp(config);
 
-fbConfig.firestore().settings(settings);
+export const db = fbConfig.firestore();
 
 export default fbConfig;

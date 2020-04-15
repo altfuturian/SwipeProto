@@ -73,7 +73,6 @@ const LOAD_DISLIKES = ({ likes }) => {
 
 
 const LIKES = (props) => {
-    console.log(props)
     return (
         <section className="content-like">
             <Container className="overflow-auto">
