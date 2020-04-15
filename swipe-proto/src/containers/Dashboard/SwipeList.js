@@ -12,19 +12,16 @@ const LOAD_SWIPE = (props) => {
     const [prop, set] = useSprings(props.resources.length, i => ({ ...to(i), from: from(i) }))
 
     const bind = useGesture(({ args: [index], down, delta: [xDelta], distance, direction: [xDir], velocity }) => {
-        const trigger = velocity > 0.2
-        const dir = xDir < 0 ? -1 : 1
+        const trigger = velocity > 0.2;
+        const dir = xDir < 0 ? -1 : 1;
         if (!down && trigger) {
-            gone.add(index)
-
-            if (dir === -1) props.funcOnSwipeDisLike(props.resources[index]);
-            else props.funcOnSwipeLike(props.resources[index]);
+            gone.add(index);
+            props.funcOnSwipe(index, dir);
         }
         set(i => {
-            if (index !== i) return
-            const isGone = gone.has(index)
-            const x = isGone ? (200 + window.innerWidth) * dir : down ? xDelta : 0
-
+            if (index !== i) return;
+            const isGone = gone.has(index);
+            const x = isGone ? (200 + window.innerWidth) * dir : down ? xDelta : 0;
             return { x, delay: undefined, config: { friction: 50, tension: down ? 800 : isGone ? 200 : 500 } }
         })
     })

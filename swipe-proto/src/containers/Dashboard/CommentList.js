@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { Row, Col, Container, Card, Button, Form } from 'react-bootstrap';
 import TimeAgo from 'react-timeago';
 import PROFILE from './Profile';
@@ -30,6 +30,7 @@ const LOAD_LIST = ({ list }) => {
 
 const COMMENT_LIST = (props) => {
 
+    const [comment, setComment] = useState('');
     return (
         <React.Fragment>
             {props.hideProfile ?
@@ -53,7 +54,7 @@ const COMMENT_LIST = (props) => {
                     </section>
                     <section className="content-comment overflow-auto">
                         <LOAD_LIST
-                            list={props.comments}
+                            list={props.comment_list}
                         />
                     </section>
                     <section className="footer-comment">
@@ -64,15 +65,18 @@ const COMMENT_LIST = (props) => {
                                         as="textarea"
                                         rows="3"
                                         placeholder="Enter something"
-                                        onChange={props.funcOnCommentChange.bind(this)}
-                                        value={props.commentInput}
+                                        onChange={(ev) => setComment(ev.target.value)}
+                                        value={comment}
                                     />
                                 </Form.Group>
                             </Form>
                                 <Button
                                     variant="primary"
                                     className="w-100"
-                                    onClick={props.funcOnSubmitComment}> Save Comment
+                                    onClick={() => {
+                                        props.funcOnSubmitComment(comment);
+                                        setComment('');
+                                    }}> Save Comment
                                 </Button>
                         </Container>
                     </section>

@@ -53,7 +53,7 @@ const CATEGORY_LIST = (props) => {
             </section>
             <section className="content-category overflow-auto">
                 <LOAD_CONTENT
-                    list={props.categories}
+                    list={props.category_list}
                     funcOnSelectCategory={props.funcOnSelectCategory}
                     selectedCategories={props.selectedCategories}
                 />
