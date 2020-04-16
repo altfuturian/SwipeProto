@@ -53,9 +53,12 @@ const COMMENT_LIST = (props) => {
                         </Col>
                     </section>
                     <section className="content-comment overflow-auto">
+                        {props.comment_list.length > 0 ?
                         <LOAD_LIST
                             list={props.comment_list}
                         />
+                        : <div className="text-secondary empty-list"><h4>No comments available</h4></div>
+                        }
                     </section>
                     <section className="footer-comment">
                         <Container>

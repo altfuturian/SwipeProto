@@ -1,15 +1,14 @@
 import React from 'react';
 import { Container, Card, Row, Col, Button } from 'react-bootstrap';
 
-const LOAD_LIKES = ({ likes }) => {
-    console.log("LIKE TAB")
+const LOAD_LIKES = ({ like_list }) => {
     return (
         <React.Fragment>
-            {likes && likes.map((like) => {
+            {like_list && like_list.map((like) => {
                 return (
-                    <React.Fragment key={like.category_id}>
-                        {like.type === "like" ?
-                            <Card key={like.category_id} className="card-like">
+                    <React.Fragment key={like.id}>
+                        {like.status === "like" ?
+                            <Card key={like.id} className="card-like">
                                 <Card.Body>
                                     <Row>
                                         <Col className="col-8">
@@ -32,18 +31,19 @@ const LOAD_LIKES = ({ likes }) => {
                     </React.Fragment>
                 )
             })}
+            {like_list.length === 0 ? <div className="text-secondary empty-list"><h4>No Likes available</h4></div> : null}
         </React.Fragment>
     )
 }
 
 
-const LOAD_DISLIKES = ({ likes }) => {
+const LOAD_DISLIKES = ({ like_list }) => {
     return (
         <React.Fragment>
-            {likes && likes.map((like) => {
+            {like_list && like_list.map((like) => {
                 return (
                     <React.Fragment key={like.category_id}>
-                        {like.type === "dislike" ?
+                        {like.status === "dislike" ?
                             <Card key={like.category_id} className="card-like">
                                 <Card.Body>
                                     <Row>
@@ -67,6 +67,7 @@ const LOAD_DISLIKES = ({ likes }) => {
                     </React.Fragment>
                 )
             })}
+            {like_list.length === 0 ? <div className="text-secondary empty-list"><h4>No Dislikes available</h4></div> : null}
         </React.Fragment>
     )
 }
@@ -76,7 +77,7 @@ const LIKES = (props) => {
     return (
         <section className="content-like">
             <Container className="overflow-auto">
-                {props.type === 'likes' ?
+                {props.activeTab === 'likes' ?
                     <LOAD_LIKES {...props} />
                     :
                     <LOAD_DISLIKES {...props} />

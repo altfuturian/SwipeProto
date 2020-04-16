@@ -1,4 +1,4 @@
-import * as fbConfig from 'firebase';
+import fbConfig from 'firebase/app';
 import 'firebase/firestore';
 
 const config = {

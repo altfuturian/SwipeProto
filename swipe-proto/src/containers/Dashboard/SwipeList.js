@@ -3,8 +3,8 @@ import { Container, Card } from 'react-bootstrap';
 import { useSprings, animated, interpolate } from 'react-spring';
 import { useGesture } from 'react-use-gesture';
 
-const to = i => ({ x: 0, y: 0, scale: 0 })
-const from = i => ({ x: 0, y: 0, rot: 0 })
+const to = i => ({ x: 0, y: 0, scale: 0 });
+const from = i => ({ x: 0, y: 0, rot: 0 });
 const trans = (r, s) => ``
 
 const LOAD_SWIPE = (props) => {
@@ -49,10 +49,15 @@ const LOAD_SWIPE = (props) => {
                                     />
                                 </div> : null
                             }
+                            {props.resources[i]["type"] === "image" ?
+                                <Card.Img className="img-responsive img-fluid" variant="top" src={props.resources[i]["res_url"]} /> : null
+                            }
                             <Card.Body>
                                 <Card.Title>{props.resources[i]["title"]}</Card.Title>
-                                <Card.Subtitle>{props.resources[i]["subtitle"]}</Card.Subtitle>
-                                <Card.Text>{props.resources[i]["description"]}</Card.Text>
+                                <Card.Subtitle className="text-secondary">{props.resources[i]["subtitle"]}</Card.Subtitle>
+                                <Card.Text
+                                    className={props.resources[i]["type"] === "article" ? "card-article" : ""}
+                                >{props.resources[i]["description"]}</Card.Text>
                             </Card.Body>
                         </Card>
                     </animated.div>
@@ -71,9 +76,9 @@ const SWIPE_LIST = (props) => {
                 </Container>
             </section>
             <section className="content-swipe">
-                {props.resources.length !== 0 ?
+                {props.resources.length > 0 ?
                     <LOAD_SWIPE {...props} />
-                    : null
+                    : <div className="text-secondary empty-list"><h4>No resources available</h4></div>
                 }
             </section>
         </React.Fragment>

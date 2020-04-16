@@ -4,21 +4,20 @@ import { Row, Col, Card, Container, Button } from 'react-bootstrap';
 const LOAD_CONTENT = (props) => {
     let grid = [];
 
-    if(props.list) {
+    if (props.list) {
         for (let i = 0; i < props.list.length; i) {
             let columns = [];
-    
+
             for (let y = 0; y < 3; y++) {
                 let cardClass = 'card-category';
-    
-                for (let a = 0; a < props.selectedCategories.length; a++) {
-                    if (props.selectedCategories[a]["id"] === props.list[i]["id"]) {
-                        cardClass = cardClass.concat(' category-active');
-                        break;
-                    }
-                }
-    
+
                 if (i < props.list.length) {
+                    for (let a = 0; a < props.select_cat.length; a++) {
+                        if (props.select_cat[a]["id"] === props.list[i]["id"]) {
+                            cardClass = cardClass.concat(' category-active');
+                            break;
+                        }
+                    }
                     columns.push(
                         <Col className="col-4" key={props.list[i]["name"]}>
                             <Card
@@ -34,10 +33,10 @@ const LOAD_CONTENT = (props) => {
                 }
                 i++;
             }
-            grid.push(<Container><Row className="mb-3">{columns}</Row></Container>)
+            grid.push(<Container key={i}><Row className="mb-3" key={i}>{columns}</Row></Container>)
         }
     }
-    
+
     return grid;
 }
 
@@ -55,7 +54,7 @@ const CATEGORY_LIST = (props) => {
                 <LOAD_CONTENT
                     list={props.category_list}
                     funcOnSelectCategory={props.funcOnSelectCategory}
-                    selectedCategories={props.selectedCategories}
+                    select_cat={props.select_cat}
                 />
             </section>
             <section className="text-center footer-category d-flex">
