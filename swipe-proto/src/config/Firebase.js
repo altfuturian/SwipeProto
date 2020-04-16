@@ -1,5 +1,6 @@
 import fbConfig from 'firebase/app';
 import 'firebase/firestore';
+import 'firebase/auth';
 
 const config = {
     apiKey: "AIzaSyDrotSPX5TCqpn7GG7xMh6fGHyd6VqqCds",
@@ -15,5 +16,6 @@ const config = {
 fbConfig.initializeApp(config);
 
 export const db = fbConfig.firestore();
+export const auth = fbConfig.auth();
 
 export default fbConfig;
