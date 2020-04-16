@@ -21,7 +21,7 @@ const PROFILE = (props) => {
                     </div>
                     <div className="content-user">
                         <div className="profile-user-avatar" />
-                        <h5>User name</h5>
+                        <h5>{props.user.username}</h5>
                     </div>
                 </Container>
             </section>

@@ -30,7 +30,14 @@ class Dashboard extends Component {
     }
 
     componentDidMount = () => {
-        this.funcFetchCategories();
+        const USER = {
+            username: this.props.user.email,
+            id: this.props.user.uid
+        }
+
+        this.setState({
+            user: USER
+        }, () => this.funcFetchCategories())
     }
 
     funcFetchCategories = () => {
@@ -251,6 +258,7 @@ class Dashboard extends Component {
                     </Col>
                     <Col className="content">
                         <SWIPE_LIST
+                            select_cat = {this.state.select_cat}
                             resources={this.state.resource_list}
                             funcOnSwipe={this.funcOnSwipe.bind(this)}
                         />

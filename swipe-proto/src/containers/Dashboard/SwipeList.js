@@ -76,7 +76,7 @@ const SWIPE_LIST = (props) => {
                 </Container>
             </section>
             <section className="content-swipe">
-                {props.resources.length > 0 ?
+                {props.resources.length > 0 && props.select_cat.length > 0 ?
                     <LOAD_SWIPE {...props} />
                     : <div className="text-secondary empty-list"><h4>No resources available</h4></div>
                 }

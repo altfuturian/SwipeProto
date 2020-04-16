@@ -36,7 +36,7 @@ class App extends Component {
       <div className="App">
         {this.state.auth ?
           <React.Fragment>
-            {this.state.user ? (<Dashboard />) : (<Login />)}
+            {this.state.user ? (<Dashboard {...this.state}/>) : (<Login />)}
           </React.Fragment>
           : null
         }
