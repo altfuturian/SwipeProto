@@ -1,7 +1,5 @@
-import * as firebase from 'firebase';
-import firestore from 'firebase/firestore'
-
-const settings = {timestampsInSnapshots: true};
+import fbConfig from 'firebase/app';
+import 'firebase/firestore';
 
 const config = {
     apiKey: "AIzaSyDrotSPX5TCqpn7GG7xMh6fGHyd6VqqCds",
@@ -14,8 +12,8 @@ const config = {
     measurementId: "G-WTHCFNP3YV"
 };
 
-firebase.initializeApp(config);
+fbConfig.initializeApp(config);
 
-firebase.firestore().settings(settings);
+export const db = fbConfig.firestore();
 
-export default firebase;
+export default fbConfig;
