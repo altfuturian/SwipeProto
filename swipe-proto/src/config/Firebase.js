@@ -16,5 +16,6 @@ const config = {
 fbConfig.initializeApp(config);
 
 export const db = fbConfig.firestore();
+export const auth = fbConfig.auth();
 
 export default fbConfig;
