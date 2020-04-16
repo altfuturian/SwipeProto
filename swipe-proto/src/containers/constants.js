@@ -1,1 +1,5 @@
+export const CATEGORIES = "tbl_category"
+export const RESOURCES = "tbl_resources"
+export const COMMENTS = "tbl_comments"
+export const HISTORY = "tbl_userHistory"
 export const USERS = "tbl_users"

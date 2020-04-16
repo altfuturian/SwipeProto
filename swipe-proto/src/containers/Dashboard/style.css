@@ -1,0 +1,290 @@
+body {
+    overflow-x: hidden;
+}
+
+.main-container {
+    max-height: 100vh;
+    /*background-color: rgb(230, 230, 230);*/
+    padding: 0px;
+    margin: 0px;
+}
+
+.header-category, .header-comment, .header-profile {
+    background-color: white;
+    padding: 10px 0px;
+    height: 65px;
+}
+
+.header-category h3, .header-comment h3 {
+    margin: 5px;
+}
+
+.header-swipe {
+    height: 65px;
+}
+
+.header-category, .content-category, .footer-category {
+    border: 1px solid;
+    border-color: #fff rgba(0, 0, 0, .125) #fff #fff;
+}
+
+.empty-list h4{
+    color: rgb(151, 151, 151);
+    text-align: center;
+}
+
+.content-category {
+    background-color: #fff;
+    height: 79vh;
+    padding: 20px 0px;
+}
+
+.card-category {
+    height: 75px;
+    transition: 0.3s;
+}
+
+.card-category:hover {
+    background-color: rgb(28, 184, 65);
+    color: white;
+    cursor: pointer;
+}
+
+.category-active {
+    background-color: rgb(28, 184, 65);
+    color: white;
+    cursor: pointer;
+}
+
+.card-category .card-body {
+    display: block !important;
+    text-align: center;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    padding: 25px 5px;
+}
+
+.footer-category {
+    height: 85px;
+    background-color: #fff;
+}
+
+/* Comment */
+
+.header-comment, .content-comment, .footer-comment {
+    border: 1px solid;
+    border-color: #fff #fff #fff rgba(0, 0, 0, .125);
+}
+
+.comment-user-avatar {
+    width: 45px;
+    height: 45px;
+    background-color: #dc3545;
+    border-radius: 50%;
+    margin-left: auto;
+}
+
+.comment-user-avatar:hover {
+    background-color: #bd3340;
+    cursor: pointer;
+}
+
+.content-comment {
+    background-color: #fff;
+    padding: 20px 0px !important;
+    height: 65.5vh;
+}
+
+.card-comment {
+    margin-bottom: 10px;
+}
+
+.card-comment .col:first-child {
+    padding-right: 10px;
+}
+
+.card-comment .card-body {
+    padding: 10px;
+}
+
+.comment-avatar {
+    width: 40px;
+    height: 40px;
+    background-color: green;
+    border-radius: 50%;
+    margin: 0px auto;
+}
+
+.card-comment .card-title {
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.card-comment .card-subtitle {
+    font-size: 12px;
+    color: rgb(87, 87, 87);
+}
+
+.card-comment .card-text {
+    font-size: 14px;
+    padding-right: 20px;
+}
+
+.footer-comment {
+    background-color: #fff;
+    ;
+    padding: 20px 0px;
+    height: 150px,
+}
+
+/* Profile */
+
+.header-profile, .content-profile, .footer-profile {
+    border: 1px solid;
+    border-color: #fff #fff #fff rgba(0, 0, 0, .125);
+}
+
+.container-profile {
+    position: relative;
+}
+
+.back-profile {
+    position: absolute;
+    color: #0069d9;
+}
+
+.back-profile:hover {
+    color: #005fc4;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.profile-user-avatar {
+    width: 20px;
+    height: 20px;
+    background-color: #dc3545;
+    border-radius: 50%;
+    margin: 0px auto;
+}
+
+.content-user h5 {
+    text-align: center;
+}
+
+.content-profile {
+    background-color: white;
+}
+
+.tab {
+    text-align: center;
+    margin: 0px;
+}
+
+.tab-nav {
+    height: 53px;
+}
+
+.tab-nav:hover {
+    cursor: pointer;
+}
+
+.tab-active {
+    font-weight: bold;
+    border: 2px solid;
+    color: #0069d9;
+    border-color: #fff #fff #dc3545;
+}
+
+.content-like {
+    height: 83.2vh;
+    padding: 20px 0px !important;
+}
+
+.card-like {
+    margin-bottom: 10px;
+}
+
+.card-like .card-body {
+    padding: 10px;
+}
+
+.card-like .category {
+    font-size: 12px;
+    color: #dc3545;
+    font-weight: bold;
+}
+
+.card-like .card-title {
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.card-like .card-subtitle {
+    font-size: 12px;
+    color: rgb(87, 87, 87);
+    margin-bottom: 30px;
+}
+
+.card-like .col:last-child {
+    text-align: end;
+    color: #0069d9;
+    font-size: 24px;
+}
+
+.card-like .fa-share:hover {
+    color: #005fc4;
+    cursor: pointer;
+}
+
+/* Main Content */
+
+.content {
+    position: relative;
+    overflow: hidden;
+}
+
+.content-swipe {
+    padding-top: 10px;
+}
+
+.animated-parent {
+    position: absolute;
+    width: 100%;
+    will-change: transform;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.animated-child {
+    cursor: pointer;
+    background-size: auto 85%;
+    background-repeat: no-repeat;
+    background-position: center center;
+    will-change: transform;
+    border-radius: 10px;
+}
+
+.card-swipe {
+    width: 60vh;
+    height: 80vh;
+    border: none;
+}
+
+.card-swipe iframe {
+    height: 350px;
+}
+
+.card-swipe img {
+  height:400px;
+}
+
+.card-swipe .card-text {
+    overflow: auto;
+    margin: 10px 0px 20px; 
+}
+
+.card-swipe .card-article {
+    height: 57vh;
+}
