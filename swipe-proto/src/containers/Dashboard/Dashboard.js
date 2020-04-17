@@ -1,3 +1,8 @@
+/*******************************************/
+/**    Created by: Carl Jason Tapales     **/
+/**    Modified by: Carl Jason Tapales    **/
+/*******************************************/
+
 import React, { Component } from 'react';
 import { Row, Col } from 'react-bootstrap';
 import './style.css';
@@ -14,14 +19,21 @@ class Dashboard extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            hideProfile: true,
-            select_cat: [],
             activeTab: 'likes',
+            loadCategory: true,
+            isLoading: false,
+            loadLike: false,
+            hideProfile: true,
             top_res: null,
-            user: {
-                username: "test",
-                id: "WWuRFTLUtbxyTdZnHh2P"
+            consistLike: false,
+            consistDislike: false,
+            user: {},
+            succ_like: {
+                status: false,
+                text: '',
+                type: ''
             },
+            select_cat: [],
             category_list: [],
             comment_list: [],
             resource_list: [],
@@ -49,27 +61,32 @@ class Dashboard extends Component {
                 querySnapshot.forEach(function (doc) {
                     let category = doc.data();
                     category.id = doc.id;
-                    categories.push(category)
+                    categories.push(category);
                 });
-                this.setState({ category_list: categories },
-                    () => {
-                        this.funcOnGenerateItems();
-                    });
+                this.setState({ 
+                    category_list: categories,
+                    loadCategory: false
+                 });
             });
     }
 
-    funcOnGenerateItems = () => {
-        let resRef = db.collection(tbl.RESOURCES);
-
+    funcOnGenerateItems = (e) => {
         if (Array.isArray(this.state.select_cat)
-            && this.state.select_cat.length) {
+            && this.state.select_cat.length > 0) {
             let selection = [];
+            let resRef = db.collection(tbl.RESOURCES);
             this.state.select_cat.forEach(function (category) {
                 selection.push(category.id);
             })
-            this.funcFetchResources(resRef.where('categoryid', 'in', selection));
+            this.setState({ isLoading: !this.state.isLoading },
+                () => this.funcFetchResources(resRef.where('categoryid', 'in', selection))
+            );
         } else {
-            this.funcFetchResources(resRef);
+            this.setState({
+                resource_list: [],
+                comment_list: [],
+                isLoading: false
+            })
         }
     }
 
@@ -107,13 +124,19 @@ class Dashboard extends Component {
                 } else {
                     this.setState({
                         resource_list: resources,
-                        top_res: null
-                    }, () => this.funcFetchComment());
+                        comment_list: [],
+                        top_res: null,
+                        isLoading: false
+                    });
                 }
             });
     }
 
     funcFetchComment = () => {
+        let alert = {}
+        alert.status = false;
+        alert.text = '';
+        alert.type = '';
         if (this.state.top_res) {
             let comRef = db.collection(tbl.COMMENTS);
             let userRef = db.collection(tbl.USERS);
@@ -136,18 +159,17 @@ class Dashboard extends Component {
                                 })
                                 comments.push(comment);
                             });
-                            comments.sort((a, b) => b.updated_at - a.updated_at)
-                            this.setState({ comment_list: comments })
+                            this.setState({ comment_list: comments, isLoading: false });
                         })
                 })
-        } else {
-            this.setState({ comment_list: [] });
-        }
+        } else this.setState({ comment_list: [], isLoading: false });
     }
 
     funcFetchLike = () => {
         let resRef = db.collection(tbl.RESOURCES);
         let catRef = db.collection(tbl.CATEGORIES);
+        let consistLike = false;
+        let consistDislike = false;
 
         db.collection(tbl.HISTORY)
             .where("userid", "==", this.state.user.id)
@@ -164,6 +186,19 @@ class Dashboard extends Component {
                                     his_querySnapshot.forEach(function (his_doc) {
                                         let like = his_doc.data();
                                         like.id = his_doc.id;
+
+                                        switch (like.status) {
+                                            case 'like': {
+                                                consistLike = true;
+                                                break;
+                                            }
+                                            case 'dislike': {
+                                                consistDislike = true;
+                                                break;
+                                            }
+                                            default: break;
+                                        }
+
                                         res_querySnapshot.forEach(function (res_doc) {
                                             if (res_doc.id === like.resourceid) {
                                                 let resource = res_doc.data();
@@ -180,10 +215,20 @@ class Dashboard extends Component {
                                             }
                                         })
                                     })
-                                    this.setState({ like_list: likes })
+                                    this.setState({
+                                        like_list: likes,
+                                        loadLike: false,
+                                        consistDislike: consistDislike,
+                                        consistLike: consistLike
+                                    })
                                 })
                         })
-                }
+                } else this.setState({ 
+                    like_list: [], 
+                    loadLike: false,
+                    consistDislike: consistDislike,
+                    consistLike: consistLike
+                })
             })
     }
 
@@ -216,7 +261,9 @@ class Dashboard extends Component {
 
     funcOnClickProfile = () => {
         this.setState({
-            hideProfile: !this.state.hideProfile
+            hideProfile: !this.state.hideProfile,
+            like_list: [],
+            loadLike: true
         }, () => this.funcFetchLike());
     }
 
@@ -228,21 +275,44 @@ class Dashboard extends Component {
 
     funcOnSwipe = (index, dir) => {
         let status = 'like';
+        let alert = {};
+        let top_res;
 
         if (dir === -1) status = 'dislike';
 
-        db.collection(tbl.HISTORY).add({
-            userid: this.state.user.id,
-            resourceid: this.state.top_res,
-            status: status,
-            created_at: new Date(),
-            updated_at: new Date()
-        })
-            .then(() => {
-                this.setState({
-                    top_res: this.state.resource_list[index - 1].id,
-                }, () => this.funcFetchComment())
-            });
+        alert.status = true;
+
+        if (dir === -1) {
+            alert.text = "Disliked!";
+            alert.type = "dislike";
+        } else {
+            alert.text = "Liked!";
+            alert.type = "like";
+        }
+        if ((index - 1) < 0) top_res = null;
+        else top_res = this.state.resource_list[index - 1].id;
+
+        this.setState({
+            top_res: top_res,
+            succ_like: alert,
+            isLoading: true
+        }, () => {
+            db.collection(tbl.HISTORY).add({
+                userid: this.state.user.id,
+                resourceid: this.state.top_res,
+                status: status,
+                created_at: new Date(),
+                updated_at: new Date()
+            }).then(() => this.funcFetchComment());
+        });
+    }
+
+    funcOnLikeToast = () => {
+        let alert = {};
+        alert.status = false;
+        alert.text = '';
+        alert.type = '';
+        this.setState({ succ_like: alert });
     }
 
     render() {
@@ -258,10 +328,11 @@ class Dashboard extends Component {
                     </Col>
                     <Col className="content">
                         <SWIPE_LIST
-                            select_cat = {this.state.select_cat}
-                            resources={this.state.resource_list}
+                            {...this.state}
                             funcOnSwipe={this.funcOnSwipe.bind(this)}
+                            funcOnLikeToast={this.funcOnLikeToast.bind(this)}
                         />
+
                     </Col>
                     <Col className="col-3 comment">
                         <COMMENT_LIST

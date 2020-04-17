@@ -1,10 +1,15 @@
-import React from 'react';
-import { Container, Card, Row, Col, Button } from 'react-bootstrap';
+/*******************************************/
+/**    Created by: Carl Jason Tapales     **/
+/**    Modified by: Carl Jason Tapales    **/
+/*******************************************/
 
-const LOAD_LIKES = ({ like_list }) => {
+import React from 'react';
+import { Container, Card, Row, Col, Button, Spinner } from 'react-bootstrap';
+
+const LOAD_LIKES = (props) => {
     return (
         <React.Fragment>
-            {like_list && like_list.map((like) => {
+            {props.like_list && props.like_list.map((like) => {
                 return (
                     <React.Fragment key={like.id}>
                         {like.status === "like" ?
@@ -31,16 +36,16 @@ const LOAD_LIKES = ({ like_list }) => {
                     </React.Fragment>
                 )
             })}
-            {like_list.length === 0 ? <div className="text-secondary empty-list"><h4>No Likes available</h4></div> : null}
+            {!props.consistLike  && !props.loadLike ? <div className="text-secondary empty-list"><h4>No Likes available</h4></div> : null}
         </React.Fragment>
     )
 }
 
 
-const LOAD_DISLIKES = ({ like_list }) => {
+const LOAD_DISLIKES = (props) => {
     return (
         <React.Fragment>
-            {like_list && like_list.map((like) => {
+            {props.like_list && props.like_list.map((like) => {
                 return (
                     <React.Fragment key={like.category_id}>
                         {like.status === "dislike" ?
@@ -67,15 +72,21 @@ const LOAD_DISLIKES = ({ like_list }) => {
                     </React.Fragment>
                 )
             })}
-            {like_list.length === 0 ? <div className="text-secondary empty-list"><h4>No Dislikes available</h4></div> : null}
+            {!props.consistDislike && !props.loadLike ? <div className="text-secondary empty-list"><h4>No Dislikes available</h4></div> : null}
         </React.Fragment>
     )
 }
 
 
-const LIKES = (props) => {
+const LIKE_LIST = (props) => {
     return (
         <section className="content-like">
+            {props.loadLike ?
+                <div className="spinner-container">
+                    <Spinner variant="primary" animation="border" />
+                </div>
+                : null
+            }
             <Container className="overflow-auto">
                 {props.activeTab === 'likes' ?
                     <LOAD_LIKES {...props} />
@@ -87,4 +98,4 @@ const LIKES = (props) => {
     )
 }
 
-export default LIKES;
+export default LIKE_LIST;

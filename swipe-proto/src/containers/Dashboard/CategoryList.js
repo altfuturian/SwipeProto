@@ -1,10 +1,15 @@
+/*******************************************/
+/**    Created by: Carl Jason Tapales     **/
+/**    Modified by: Carl Jason Tapales    **/
+/*******************************************/
+
 import React from 'react';
-import { Row, Col, Card, Container, Button } from 'react-bootstrap';
+import { Row, Col, Card, Container, Button, Spinner } from 'react-bootstrap';
 
 const LOAD_CONTENT = (props) => {
     let grid = [];
 
-    if (props.list) {
+    if (props.list && props.loadCategory === false) {
         for (let i = 0; i < props.list.length; i) {
             let columns = [];
 
@@ -43,6 +48,12 @@ const LOAD_CONTENT = (props) => {
 const CATEGORY_LIST = (props) => {
     return (
         <React.Fragment>
+            {props.loadCategory ?
+                <div className="spinner-container">
+                    <Spinner variant="primary" animation="border" />
+                </div>
+                : null
+            }
             <section className="header-category text-center">
                 <div>
                     <Container>
@@ -55,13 +66,15 @@ const CATEGORY_LIST = (props) => {
                     list={props.category_list}
                     funcOnSelectCategory={props.funcOnSelectCategory}
                     select_cat={props.select_cat}
+                    loadCategory={props.loadCategory}
                 />
             </section>
             <section className="text-center footer-category d-flex">
                 <div className="w-100 align-items-center d-flex justify-content-center pl-3 pr-3">
                     <Button
                         onClick={props.funcOnGenerateItems.bind(this)}
-                        className=" btn-generate w-100">Generate Items</Button>
+                        className=" btn-generate w-100"
+                        disabled={props.loadCategory || props.isLoading}>Generate Items</Button>
                 </div>
             </section>
         </React.Fragment>

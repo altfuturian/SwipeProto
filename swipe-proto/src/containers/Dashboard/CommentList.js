@@ -1,5 +1,10 @@
-import React, {useState} from 'react';
-import { Row, Col, Container, Card, Button, Form } from 'react-bootstrap';
+/*******************************************/
+/**    Created by: Carl Jason Tapales     **/
+/**    Modified by: Carl Jason Tapales    **/
+/*******************************************/
+
+import React, { useState } from 'react';
+import { Row, Col, Container, Card, Button, Form, Image, Spinner } from 'react-bootstrap';
 import TimeAgo from 'react-timeago';
 import PROFILE from './Profile';
 
@@ -11,8 +16,11 @@ const LOAD_LIST = ({ list }) => {
                     <Card className="card-comment" key={index}>
                         <Card.Body>
                             <Row>
-                                <Col className="col-3">
-                                    <div className="comment-avatar"></div>
+                                <Col className="col-3 text-center">
+                                    <Image
+                                        src="https://cdn4.iconfinder.com/data/icons/logos-3/426/react_js-512.png"
+                                        alt="avatar"
+                                    />
                                 </Col>
                                 <Col className="pl-0">
                                     <Card.Title>{comment.username}</Card.Title>
@@ -29,7 +37,6 @@ const LOAD_LIST = ({ list }) => {
 }
 
 const COMMENT_LIST = (props) => {
-
     const [comment, setComment] = useState('');
     return (
         <React.Fragment>
@@ -42,22 +49,35 @@ const COMMENT_LIST = (props) => {
                                     <Col className="col-8 align-middle">
                                         <h3> Comment </h3>
                                     </Col>
-                                    <Col>
-                                        <div
-                                            className="user-avatar comment-user-avatar"
-                                            onClick={props.funcOnClickProfile.bind(this)}
-                                        />
+                                    <Col className="text-right">
+                                        <div className="comment-user-profile">
+                                            <Image
+                                                onClick={props.funcOnClickProfile.bind(this)}
+                                                src="https://cdn4.iconfinder.com/data/icons/logos-3/426/react_js-512.png"
+                                                alt="avatar"
+                                            />
+                                        </div>
                                     </Col>
                                 </Row>
                             </div>
                         </Col>
                     </section>
                     <section className="content-comment overflow-auto">
+                        {props.isLoading || props.loadCategory  ?
+                            <div className="spinner-container">
+                                <Spinner variant="primary" animation="border" />
+                            </div>
+                            : null
+                        }
                         {props.comment_list.length > 0 ?
-                        <LOAD_LIST
-                            list={props.comment_list}
-                        />
-                        : <div className="text-secondary empty-list"><h4>No comments available</h4></div>
+                            <LOAD_LIST
+                                list={props.comment_list}
+                            />
+                            : <React.Fragment>
+                                {!props.isLoading && !props.loadCategory ?
+                                    <div className="text-secondary empty-list"><h4>No comments available</h4></div> : null
+                                }
+                            </React.Fragment>
                         }
                     </section>
                     <section className="footer-comment">
@@ -73,13 +93,14 @@ const COMMENT_LIST = (props) => {
                                     />
                                 </Form.Group>
                             </Form>
-                                <Button
-                                    variant="primary"
-                                    className="w-100"
-                                    onClick={() => {
-                                        props.funcOnSubmitComment(comment);
-                                        setComment('');
-                                    }}> Save Comment
+                            <Button
+                                variant="primary"
+                                className="w-100"
+                                disabled={props.isLoading || props.comment_list.length === 0}
+                                onClick={() => {
+                                    props.funcOnSubmitComment(comment);
+                                    setComment('');
+                                }}> Save Comment
                                 </Button>
                         </Container>
                     </section>

@@ -1,6 +1,11 @@
+/*******************************************/
+/**    Created by: Carl Jason Tapales     **/
+/**    Modified by: Carl Jason Tapales    **/
+/*******************************************/
+
 import React from 'react';
-import { Row, Col, Container } from 'react-bootstrap';
-import LIKES from './Likes';
+import { Row, Col, Container, Image } from 'react-bootstrap';
+import LIKE_LIST from './LikeList';
 
 const PROFILE = (props) => {
     let likeTab = "tab-nav d-flex align-items-center";
@@ -20,7 +25,12 @@ const PROFILE = (props) => {
                         <i className="fa fa-arrow-left" />
                     </div>
                     <div className="content-user">
-                        <div className="profile-user-avatar" />
+                        <div className="profile-user-avatar">
+                            <Image
+                                src="https://cdn4.iconfinder.com/data/icons/logos-3/426/react_js-512.png"
+                                alt="avatar"
+                            />
+                        </div>
                         <h5>{props.user.username}</h5>
                     </div>
                 </Container>
@@ -38,7 +48,7 @@ const PROFILE = (props) => {
                         <Container className="nav-tab">Dislikes</Container>
                     </Col>
                 </Row>
-                <LIKES
+                <LIKE_LIST
                     {...props}
                     type={props.activeTab}
                 />

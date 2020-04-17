@@ -1,3 +1,8 @@
+/*******************************************/
+/**    Created by: Carl Jason Tapales     **/
+/**    Modified by: Carl Jason Tapales    **/
+/*******************************************/
+
 import React, { Component } from 'react';
 
 import Login from './containers/Login/Login';
