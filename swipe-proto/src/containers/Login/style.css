@@ -68,3 +68,13 @@ body {
 .side-content .container:nth-child(2) form{
     margin-top: 40px;
 }
+  
+  .input-feedback {
+    color: rgb(235, 54, 54);
+    font-size: 14px;
+  }
+  
+
+.input-feedback {
+    text-align: left;
+}
