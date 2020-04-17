@@ -3,13 +3,13 @@ import { Button, Form } from 'react-bootstrap';
 import { Formik } from 'formik';
 import * as Yup from "yup";
 
-const SIGNUP_FORM = () => {
+const SIGNUP_FORM = ({funcSignUp}) => {
     return (
         <Formik
             initialValues={{ email: "", password: "", confirmPassword: "" }}
             onSubmit={(values, { setSubmitting }) => {
                 setTimeout(() => {
-                    //funcLogin(values.email, values.password);
+                    funcSignUp(values.email, values.password);
                     console.log(values)
                     setSubmitting(false);
                 }, 500);

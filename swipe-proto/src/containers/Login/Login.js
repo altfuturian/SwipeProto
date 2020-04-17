@@ -5,8 +5,10 @@
 
 import React, { Component } from 'react';
 import { Container, Row, Col, Button, Image } from 'react-bootstrap';
-import { auth } from '../../config/Firebase'
+import { auth, db } from '../../config/Firebase'
 import './style.css';
+
+import * as tbl from './../constants'
 
 import LOGIN_FORM from './LoginForm';
 import SIGNUP_FORM from './SignupForm';
@@ -38,7 +40,16 @@ class Login extends Component {
 
     funcSignUp = (email, password) => {
         auth.createUserWithEmailAndPassword(email, password)
-            .then(() => {})
+            .then((u) => {
+                db.collection(tbl.USERS)
+                .add({
+                    userId: u.user.uid,
+                    username: email,
+                    password: password,
+                    created_at: new Date(),
+                    updated_at: new Date()
+                });
+            })
             .catch((err) => {
                 console.log(err);
             });
@@ -90,7 +101,7 @@ class Login extends Component {
                             <React.Fragment>
                                 <Container>
                                     <h3>Registration</h3>
-                                    <SIGNUP_FORM />
+                                    <SIGNUP_FORM funcSignUp={this.funcSignUp.bind(this)}/>
                                 </Container>
                                 <Container>
                                     <Button variant="link" onClick={this.funcLoadSignUp}>Back</Button>
