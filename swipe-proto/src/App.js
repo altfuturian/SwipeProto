@@ -35,13 +35,17 @@ class App extends Component {
     })
   }
 
+  funcOnSkip = (user) => {
+    this.setState({ user, auth: true });
+  }
+
   render() {
     console.log(this.state)
     return (
       <div className="App">
         {this.state.auth ?
           <React.Fragment>
-            {this.state.user ? (<Dashboard {...this.state}/>) : (<Login />)}
+            {this.state.user ? (<Dashboard {...this.state}/>) : (<Login funcOnSkip={this.funcOnSkip.bind(this)}/>)}
           </React.Fragment>
           : null
         }
