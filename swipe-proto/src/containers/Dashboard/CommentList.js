@@ -6,7 +6,6 @@
 import React, { useState } from 'react';
 import { Row, Col, Container, Card, Button, Form, Image, Spinner } from 'react-bootstrap';
 import TimeAgo from 'react-timeago';
-import PROFILE from './Profile';
 
 const LOAD_LIST = ({ list }) => {
     return (
@@ -40,79 +39,70 @@ const COMMENT_LIST = (props) => {
     const [comment, setComment] = useState('');
     return (
         <React.Fragment>
-            {props.hideProfile ?
-                <React.Fragment>
-                    <section className="header-comment">
-                        <Col>
-                            <div>
-                                <Row>
-                                    <Col className="col-8 align-middle">
-                                        <h3> Comment </h3>
-                                    </Col>
-                                    <Col className="text-right">
-                                        {!props.anonymous ?
-                                            <div className="comment-user-profile">
-                                                <Image
-                                                    onClick={props.funcOnClickProfile.bind(this)}
-                                                    src="https://cdn4.iconfinder.com/data/icons/logos-3/426/react_js-512.png"
-                                                    alt="avatar"
-                                                />
-                                            </div> : null
-                                        }
-                                    </Col>
-                                </Row>
-                            </div>
-                        </Col>
-                    </section>
-                    <section className="content-comment overflow-auto">
-                        {props.isLoading || props.loadCategory ?
-                            <div className="spinner-container">
-                                <Spinner variant="primary" animation="border" />
-                            </div>
-                            : null
-                        }
-                        {props.comment_list.length > 0 ?
-                            <LOAD_LIST
-                                list={props.comment_list}
-                            />
-                            : <React.Fragment>
-                                {!props.isLoading && !props.loadCategory ?
-                                    <div className="text-secondary empty-list"><h4>No comments available</h4></div> : null
+            <section className="header-comment">
+                <Col>
+                    <div>
+                        <Row>
+                            <Col className="col-8 align-middle">
+                                <h3> Comment </h3>
+                            </Col>
+                            <Col className="text-right">
+                                {!props.anonymous ?
+                                    <div className="comment-user-profile">
+                                        <Image
+                                            onClick={props.funcOnClickProfile.bind(this)}
+                                            src="https://cdn4.iconfinder.com/data/icons/logos-3/426/react_js-512.png"
+                                            alt="avatar"
+                                        />
+                                    </div> : null
                                 }
-                            </React.Fragment>
+                            </Col>
+                        </Row>
+                    </div>
+                </Col>
+            </section>
+            <section className="content-comment overflow-auto">
+                {props.isLoading || props.loadCategory ?
+                    <div className="spinner-container">
+                        <Spinner variant="primary" animation="border" />
+                    </div>
+                    : null
+                }
+                {props.comment_list.length > 0 ?
+                    <LOAD_LIST
+                        list={props.comment_list}
+                    />
+                    : <React.Fragment>
+                        {!props.isLoading && !props.loadCategory ?
+                            <div className="text-secondary empty-list"><h4>No comments available</h4></div> : null
                         }
-                    </section>
-                    <section className="footer-comment">
-                        <Container>
-                            <Form>
-                                <Form.Group>
-                                    <Form.Control
-                                        as="textarea"
-                                        rows="3"
-                                        placeholder="Enter something"
-                                        onChange={(ev) => setComment(ev.target.value)}
-                                        value={comment}
-                                    />
-                                </Form.Group>
-                            </Form>
-                            <Button
-                                variant="primary"
-                                className="w-100"
-                                disabled={props.isLoading || !props.top_res || props.anonymous}
-                                onClick={() => {
-                                    props.funcOnSubmitComment(comment);
-                                    setComment('');
-                                }}> Save Comment
-                                </Button>
-                        </Container>
-                    </section>
-                </React.Fragment>
-                :
-                <PROFILE
-                    {...props}
-                />
-            }
-
+                    </React.Fragment>
+                }
+            </section>
+            <section className="footer-comment">
+                <div className="align-items-center justify-content-center">
+                    <Form>
+                        <Form.Group>
+                            <Form.Control
+                                as="textarea"
+                                rows="3"
+                                placeholder="Enter something"
+                                onChange={(ev) => setComment(ev.target.value)}
+                                value={comment}
+                            />
+                        </Form.Group>
+                    </Form>
+                    <Button
+                        variant="primary"
+                        className="w-100"
+                        disabled={props.isLoading || !props.top_res || props.anonymous}
+                        onClick={() => {
+                            props.funcOnSubmitComment(comment);
+                            setComment('');
+                        }}> Save Comment
+                    </Button>
+                </div>
+            </section>
         </React.Fragment>
     )
 

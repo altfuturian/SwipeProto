@@ -43,7 +43,7 @@ class Login extends Component {
             .then((u) => {
                 db.collection(tbl.USERS)
                 .add({
-                    userId: u.user.uid,
+                    userid: u.user.uid,
                     username: email,
                     password: password,
                     created_at: new Date(),

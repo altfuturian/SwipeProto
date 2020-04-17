@@ -4,10 +4,11 @@
 /*******************************************/
 
 import React from 'react';
-import { Row, Col, Container, Image } from 'react-bootstrap';
+import { Row, Col, Container, Image, Button } from 'react-bootstrap';
 import LIKE_LIST from './LikeList';
 
 const PROFILE = (props) => {
+    console.log("PROF: ", props.user)
     let likeTab = "tab-nav d-flex align-items-center";
     let dislikeTab = "tab-nav d-flex align-items-center";
 
@@ -19,7 +20,7 @@ const PROFILE = (props) => {
 
     return (
         <React.Fragment>
-            <section className="header-profile">
+            <div className="header-profile">
                 <Container className="container-profile">
                     <div onClick={props.funcOnClickProfile.bind(this)} className="back-profile">
                         <i className="fa fa-arrow-left" />
@@ -31,11 +32,12 @@ const PROFILE = (props) => {
                                 alt="avatar"
                             />
                         </div>
-                        <h5>{props.user.username}</h5>
+                        <h5>{props.user_info.username}</h5>
+                        <Button variant="link">Logout</Button> 
                     </div>
                 </Container>
-            </section>
-            <section className="content-profile">
+            </div>
+            <div>
                 <Row className="tab">
                     <Col
                         className={likeTab}
@@ -48,11 +50,13 @@ const PROFILE = (props) => {
                         <Container className="nav-tab">Dislikes</Container>
                     </Col>
                 </Row>
+            </div>
+            <div className="content-profile">
                 <LIKE_LIST
                     {...props}
                     type={props.activeTab}
                 />
-            </section>
+            </div>
         </React.Fragment>
     )
 }

@@ -4,7 +4,6 @@
 /*******************************************/
 
 import React, { Component } from 'react';
-import { Row, Col } from 'react-bootstrap';
 import './style.css';
 
 import { db } from './../../config/Firebase'
@@ -14,12 +13,16 @@ import * as tbl from './../constants'
 import CATEGORY_LIST from './CategoryList';
 import COMMENT_LIST from './CommentList';
 import SWIPE_LIST from './SwipeList';
+import PROFILE from './Profile';
 
 class Dashboard extends Component {
     constructor(props) {
         super(props);
         this.state = {
             anonymous: false,
+            selectionCounter: {
+                status: false
+            },
             activeTab: 'likes',
             loadCategory: true,
             isLoading: false,
@@ -28,7 +31,7 @@ class Dashboard extends Component {
             top_res: null,
             consistLike: false,
             consistDislike: false,
-            user: {},
+            user_info: {},
             succ_like: {
                 status: false,
                 text: '',
@@ -43,6 +46,7 @@ class Dashboard extends Component {
     }
 
     componentDidMount = () => {
+        console.log("PROPS: ", this.props)
         if (this.props.anonymous) {
             console.log(this.props.anonymous)
             this.setState({
@@ -54,7 +58,7 @@ class Dashboard extends Component {
                 id: this.props.user.uid
             }
             this.setState({
-                user: USER
+                user_info: USER
             }, () => this.funcFetchCategories())
         }
     }
@@ -77,22 +81,23 @@ class Dashboard extends Component {
             });
     }
 
-    funcOnGenerateItems = (e) => {
+    funcOnGenerateItems = () => {
+        console.log(this.state)
         if (Array.isArray(this.state.select_cat)
             && this.state.select_cat.length > 0) {
-            let selection = [];
             let resRef = db.collection(tbl.RESOURCES);
+            let selected = [];
             this.state.select_cat.forEach(function (category) {
-                selection.push(category.id);
+                selected.push(category.id);
             })
             this.setState({ isLoading: !this.state.isLoading },
-                () => this.funcFetchResources(resRef.where('categoryid', 'in', selection))
+                () => this.funcFetchResources(resRef.where('categoryid', 'in', selected))
             );
         } else {
             this.setState({
                 resource_list: [],
                 comment_list: [],
-                isLoading: false
+                isLoading: !this.state.isLoading
             })
         }
     }
@@ -119,7 +124,7 @@ class Dashboard extends Component {
                                     let found = false;
                                     his_querySnapshot.forEach(function (his_doc) {
                                         if (resource.id === his_doc.data().resourceid
-                                        && his_doc.data().userid === this.state.user.userid) found = true;
+                                            && his_doc.data().userid === this.state.user_info.userid) found = true;
                                     })
                                     if (!found) resources.push(resource);
                                 } else resources.push(resource);
@@ -135,7 +140,7 @@ class Dashboard extends Component {
                         resource_list: resources,
                         comment_list: [],
                         top_res: null,
-                        isLoading: false
+                        isLoading: !this.state.isLoading
                     });
                 }
             });
@@ -181,7 +186,7 @@ class Dashboard extends Component {
         let consistDislike = false;
 
         db.collection(tbl.HISTORY)
-            .where("userid", "==", this.state.user.id)
+            .where("userid", "==", this.state.user_info.id)
             .orderBy("updated_at", "desc")
             .onSnapshot((his_querySnapshot) => {
                 if (his_querySnapshot.empty === false) {
@@ -248,19 +253,43 @@ class Dashboard extends Component {
             const newSelection = select_cat
                 .filter(select_cat => select_cat.id !== category.id);
 
+            let selectionStatus = [];
+            selectionStatus.status = true;
+            selectionStatus.type = "success";
+
+            if (newSelection.length > 1)
+                selectionStatus.text = newSelection.length + " categories selected"
+            else selectionStatus.text = newSelection.length + " category selected"
+
             this.setState({
-                select_cat: newSelection
+                select_cat: newSelection,
+                selectionCounter: selectionStatus
             })
         } else {
-            this.setState({
-                select_cat: [...this.state.select_cat, category]
-            });
+            let selectionStatus = [];
+            if (select_cat.length + 1 > 10) {
+                selectionStatus.status = true;
+                selectionStatus.type = "danger";
+                selectionStatus.text = "Maximum number of categories selected"
+                this.setState({ selectionCounter: selectionStatus })
+            } else {
+                selectionStatus.status = true;
+                selectionStatus.type = "success";
+
+                if (select_cat.length + 1 > 1)
+                    selectionStatus.text = select_cat.length + 1 + " categories selected"
+                else selectionStatus.text = select_cat.length + 1 + " category selected"
+                this.setState({
+                    select_cat: [...select_cat, category],
+                    selectionCounter: selectionStatus
+                });
+            }
         }
     }
 
     funcOnSubmitComment = (comment) => {
         db.collection(tbl.COMMENTS).add({
-            userid: this.state.user.id,
+            userid: this.state.user_info.id,
             comment: comment,
             resourceid: this.state.top_res,
             created_at: new Date(),
@@ -305,11 +334,11 @@ class Dashboard extends Component {
         this.setState({
             top_res: top_res,
             succ_like: alert,
-            isLoading: true
+            isLoading: !this.state.isLoading
         }, () => {
             if (!this.state.anonymous) {
                 db.collection(tbl.HISTORY).add({
-                    userid: this.state.user.id,
+                    userid: this.state.user_info.id,
                     resourceid: resourceid,
                     status: status,
                     created_at: new Date(),
@@ -327,35 +356,45 @@ class Dashboard extends Component {
         this.setState({ succ_like: alert });
     }
 
+    funcOnCategoryCounter = () => {
+        let selectionStatus = [];
+        selectionStatus.status = false;
+        this.setState({ selectionCounter: selectionStatus });
+    }
+
     render() {
+        console.log(this.state)
         return (
             <section className="main-container">
-                <Row>
-                    <Col className="col-3 m-0 category">
-                        <CATEGORY_LIST
+                <div className="category">
+                    <CATEGORY_LIST
+                        {...this.state}
+                        funcOnCategoryCounter={this.funcOnCategoryCounter.bind(this)}
+                        funcOnSelectCategory={this.funcOnSelectCategory.bind(this)}
+                        funcOnGenerateItems={this.funcOnGenerateItems.bind(this)}
+                    />
+                </div>
+                <div className="content">
+                    <SWIPE_LIST
+                        {...this.state}
+                        funcOnSwipe={this.funcOnSwipe.bind(this)}
+                        funcOnLikeToast={this.funcOnLikeToast.bind(this)}
+                    />
+                </div>
+                <div className="comment">
+                    {!this.state.hideProfile
+                        ? <PROFILE
                             {...this.state}
-                            funcOnSelectCategory={this.funcOnSelectCategory.bind(this)}
-                            funcOnGenerateItems={this.funcOnGenerateItems.bind(this)}
-                        />
-                    </Col>
-                    <Col className="content">
-                        <SWIPE_LIST
-                            {...this.state}
-                            funcOnSwipe={this.funcOnSwipe.bind(this)}
-                            funcOnLikeToast={this.funcOnLikeToast.bind(this)}
-                        />
-
-                    </Col>
-                    <Col className="col-3 comment">
-                        <COMMENT_LIST
+                            funcOnClickProfile={this.funcOnClickProfile.bind(this)}
+                            funcOnChangeTab={this.funcOnChangeTab.bind(this)}
+                        /> : <COMMENT_LIST
                             {...this.state}
                             {...this.props}
                             funcOnSubmitComment={this.funcOnSubmitComment}
                             funcOnClickProfile={this.funcOnClickProfile.bind(this)}
-                            funcOnChangeTab={this.funcOnChangeTab.bind(this)}
                         />
-                    </Col>
-                </Row>
+                    }
+                </div>
             </section>
         )
     }

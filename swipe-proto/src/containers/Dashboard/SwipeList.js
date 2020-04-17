@@ -14,6 +14,7 @@ const trans = (r, s) => ``
 
 const LOAD_SWIPE = (props) => {
     const [gone] = useState(() => new Set());
+    const [empty, setEmpty] = useState(false);
     const [prop, set] = useSprings(props.resource_list.length, i => ({ ...to(i), from: from(i) }))
 
     const bind = useGesture(({ args: [index], down, delta: [xDelta], distance, direction: [xDir], velocity }) => {
@@ -22,6 +23,8 @@ const LOAD_SWIPE = (props) => {
         if (!down && trigger) {
             gone.add(index);
             props.funcOnSwipe(index, dir);
+            console.log(gone.size, props.resource_list.length)
+            if(gone.size === props.resource_list.length) setEmpty(true)
         }
         set(i => {
             if (index !== i) return;
@@ -68,6 +71,7 @@ const LOAD_SWIPE = (props) => {
                     </animated.div>
                 </animated.div>
             ))}
+            {empty ? <div className="text-secondary empty-list"><h4>No resources available</h4></div> : null   }
         </React.Fragment>
     )
 }

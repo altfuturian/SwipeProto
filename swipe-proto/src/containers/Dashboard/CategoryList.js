@@ -4,7 +4,7 @@
 /*******************************************/
 
 import React from 'react';
-import { Row, Col, Card, Container, Button, Spinner } from 'react-bootstrap';
+import { Row, Col, Card, Container, Button, Spinner, Toast } from 'react-bootstrap';
 
 const LOAD_CONTENT = (props) => {
     let grid = [];
@@ -62,6 +62,14 @@ const CATEGORY_LIST = (props) => {
                 </div>
             </section>
             <section className="content-category overflow-auto">
+                <Toast
+                    onClose={() => props.funcOnCategoryCounter()}
+                    show={props.selectionCounter.status}
+                    delay={1000} animation={false}
+                    className={props.selectionCounter.type === 'success' ? "success" : "danger"}
+                    autohide>
+                    <Toast.Body>{props.selectionCounter.text}</Toast.Body>
+                </Toast>
                 <LOAD_CONTENT
                     list={props.category_list}
                     funcOnSelectCategory={props.funcOnSelectCategory}

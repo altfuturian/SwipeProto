@@ -4,7 +4,7 @@
 /*******************************************/
 
 import React from 'react';
-import { Container, Card, Row, Col, Button, Spinner } from 'react-bootstrap';
+import { Card, Row, Col, Button, Spinner } from 'react-bootstrap';
 
 const LOAD_LIKES = (props) => {
     return (
@@ -80,21 +80,19 @@ const LOAD_DISLIKES = (props) => {
 
 const LIKE_LIST = (props) => {
     return (
-        <section className="content-like">
+        <React.Fragment>
             {props.loadLike ?
                 <div className="spinner-container">
                     <Spinner variant="primary" animation="border" />
                 </div>
                 : null
             }
-            <Container className="overflow-auto">
-                {props.activeTab === 'likes' ?
+            {props.activeTab === 'likes' ?
                     <LOAD_LIKES {...props} />
                     :
                     <LOAD_DISLIKES {...props} />
                 }
-            </Container>
-        </section>
+        </React.Fragment>
     )
 }
 
