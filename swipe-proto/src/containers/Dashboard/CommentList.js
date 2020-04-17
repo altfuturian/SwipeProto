@@ -50,20 +50,22 @@ const COMMENT_LIST = (props) => {
                                         <h3> Comment </h3>
                                     </Col>
                                     <Col className="text-right">
-                                        <div className="comment-user-profile">
-                                            <Image
-                                                onClick={props.funcOnClickProfile.bind(this)}
-                                                src="https://cdn4.iconfinder.com/data/icons/logos-3/426/react_js-512.png"
-                                                alt="avatar"
-                                            />
-                                        </div>
+                                        {!props.anonymous ?
+                                            <div className="comment-user-profile">
+                                                <Image
+                                                    onClick={props.funcOnClickProfile.bind(this)}
+                                                    src="https://cdn4.iconfinder.com/data/icons/logos-3/426/react_js-512.png"
+                                                    alt="avatar"
+                                                />
+                                            </div> : null
+                                        }
                                     </Col>
                                 </Row>
                             </div>
                         </Col>
                     </section>
                     <section className="content-comment overflow-auto">
-                        {props.isLoading || props.loadCategory  ?
+                        {props.isLoading || props.loadCategory ?
                             <div className="spinner-container">
                                 <Spinner variant="primary" animation="border" />
                             </div>
@@ -96,7 +98,7 @@ const COMMENT_LIST = (props) => {
                             <Button
                                 variant="primary"
                                 className="w-100"
-                                disabled={props.isLoading || props.comment_list.length === 0}
+                                disabled={props.isLoading || !props.top_res || props.anonymous}
                                 onClick={() => {
                                     props.funcOnSubmitComment(comment);
                                     setComment('');

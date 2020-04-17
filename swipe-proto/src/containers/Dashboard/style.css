@@ -341,6 +341,7 @@ body {
 
 .card-swipe .card-text {
     overflow: auto;
+    height: 30vh;
     margin: 10px 0px 20px;
 }
 

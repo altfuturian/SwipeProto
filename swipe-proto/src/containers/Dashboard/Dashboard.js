@@ -19,6 +19,7 @@ class Dashboard extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            anonymous: false,
             activeTab: 'likes',
             loadCategory: true,
             isLoading: false,
@@ -42,14 +43,20 @@ class Dashboard extends Component {
     }
 
     componentDidMount = () => {
-        const USER = {
-            username: this.props.user.email,
-            id: this.props.user.uid
+        if (this.props.anonymous) {
+            console.log(this.props.anonymous)
+            this.setState({
+                anonymous: this.props.anonymous
+            }, () => this.funcFetchCategories())
+        } else {
+            const USER = {
+                username: this.props.user.email,
+                id: this.props.user.uid
+            }
+            this.setState({
+                user: USER
+            }, () => this.funcFetchCategories())
         }
-
-        this.setState({
-            user: USER
-        }, () => this.funcFetchCategories())
     }
 
     funcFetchCategories = () => {
@@ -63,10 +70,10 @@ class Dashboard extends Component {
                     category.id = doc.id;
                     categories.push(category);
                 });
-                this.setState({ 
+                this.setState({
                     category_list: categories,
                     loadCategory: false
-                 });
+                });
             });
     }
 
@@ -92,7 +99,7 @@ class Dashboard extends Component {
 
     funcFetchResources = (resRef) => {
         let hisRef = db.collection(tbl.HISTORY);
-
+        let anonymous = this.state.anonymous;
         resRef
             .orderBy("updated_at")
             .get()
@@ -103,14 +110,16 @@ class Dashboard extends Component {
                     hisRef
                         .get()
                         .then((his_querySnapshot) => {
+
                             res_querySnapshot.forEach(function (res_doc) {
                                 let resource = res_doc.data();
                                 resource.id = res_doc.id;
 
-                                if (his_querySnapshot.empty === false) {
+                                if (his_querySnapshot.empty === false && !anonymous) {
                                     let found = false;
                                     his_querySnapshot.forEach(function (his_doc) {
-                                        if (resource.id === his_doc.data().resourceid) found = true;
+                                        if (resource.id === his_doc.data().resourceid
+                                        && his_doc.data().userid === this.state.user.userid) found = true;
                                     })
                                     if (!found) resources.push(resource);
                                 } else resources.push(resource);
@@ -152,7 +161,7 @@ class Dashboard extends Component {
                                 let comment = com_doc.data();
                                 comment.datetime = JSON.stringify(comment.updated_at.toDate());
                                 usr_querySnapshot.forEach(function (usr_doc) {
-                                    if (usr_doc.id === comment.userid) {
+                                    if (usr_doc.data().userid === comment.userid) {
                                         let user = usr_doc.data();
                                         comment.username = user.username;
                                     }
@@ -223,8 +232,8 @@ class Dashboard extends Component {
                                     })
                                 })
                         })
-                } else this.setState({ 
-                    like_list: [], 
+                } else this.setState({
+                    like_list: [],
                     loadLike: false,
                     consistDislike: consistDislike,
                     consistLike: consistLike
@@ -277,6 +286,7 @@ class Dashboard extends Component {
         let status = 'like';
         let alert = {};
         let top_res;
+        let resourceid = this.state.top_res;
 
         if (dir === -1) status = 'dislike';
 
@@ -297,13 +307,15 @@ class Dashboard extends Component {
             succ_like: alert,
             isLoading: true
         }, () => {
-            db.collection(tbl.HISTORY).add({
-                userid: this.state.user.id,
-                resourceid: this.state.top_res,
-                status: status,
-                created_at: new Date(),
-                updated_at: new Date()
-            }).then(() => this.funcFetchComment());
+            if (!this.state.anonymous) {
+                db.collection(tbl.HISTORY).add({
+                    userid: this.state.user.id,
+                    resourceid: resourceid,
+                    status: status,
+                    created_at: new Date(),
+                    updated_at: new Date()
+                }).then(() => this.funcFetchComment());
+            } else this.funcFetchComment();
         });
     }
 
@@ -337,6 +349,7 @@ class Dashboard extends Component {
                     <Col className="col-3 comment">
                         <COMMENT_LIST
                             {...this.state}
+                            {...this.props}
                             funcOnSubmitComment={this.funcOnSubmitComment}
                             funcOnClickProfile={this.funcOnClickProfile.bind(this)}
                             funcOnChangeTab={this.funcOnChangeTab.bind(this)}
