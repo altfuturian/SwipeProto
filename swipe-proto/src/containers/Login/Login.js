@@ -4,7 +4,7 @@
 /*******************************************/
 
 import React, { Component } from 'react';
-import { Container, Row, Col, Button, Image } from 'react-bootstrap';
+import { Container, Col, Button, Image } from 'react-bootstrap';
 import { auth, db } from '../../config/Firebase'
 import './style.css';
 
@@ -20,6 +20,7 @@ class Login extends Component {
         this.funcOnSkip = props.funcOnSkip.bind(this);
 
         this.state = {
+            showAlert: false,
             loadSignUp: false
         };
     }
@@ -32,9 +33,11 @@ class Login extends Component {
 
     funcLogin = (email, password) => {
         auth.signInWithEmailAndPassword(email, password)
-            .then(() => { })
+            .then(() => this.setState({ showAlert: false }))
             .catch((err) => {
-                console.log(err);
+                if (err.code === "auth/user-not-found") {
+                    this.setState({ showAlert: true })
+                }
             });
     }
 
@@ -42,13 +45,13 @@ class Login extends Component {
         auth.createUserWithEmailAndPassword(email, password)
             .then((u) => {
                 db.collection(tbl.USERS)
-                .add({
-                    userid: u.user.uid,
-                    username: email,
-                    password: password,
-                    created_at: new Date(),
-                    updated_at: new Date()
-                });
+                    .add({
+                        userid: u.user.uid,
+                        username: email,
+                        password: password,
+                        created_at: new Date(),
+                        updated_at: new Date()
+                    });
             })
             .catch((err) => {
                 console.log(err);
@@ -64,52 +67,49 @@ class Login extends Component {
 
         return (
             <div className="main-container">
-                <Row>
-                    <Col className="col-9 main-content">
-                        <Container>
-                            <Col className="col-8">
-                                <h1>Swipe Prototype</h1>
-                                <p>
-                                    Oceans and seas supply most of the water that evaporates and then falls as rain in the water cycle.
-                                    They are salty while rivers and lakes are fresh water.
-                                    When salty water from the ocean mixes with fresh water, a special place called an estuary is formed.
+                <section className="main-content">
+                    <div>
+                        <h1>Swipe-Proto</h1>
+                        <p>
+                            Oceans and seas supply most of the water that evaporates and then falls as rain in the water cycle.
+                            They are salty while rivers and lakes are fresh water.
+                            When salty water from the ocean mixes with fresh water, a special place called an estuary is formed.
                                 </p>
-                                <Button variant="outline-light" onClick={this.funcLoadSignUp}>Sign Up</Button>
-                            </Col>
-                        </Container>
-                    </Col>
-                    <Col className="side-content text-center">
-                        <Container>
-                            <Image src="https://cdn4.iconfinder.com/data/icons/logos-3/426/react_js-512.png" rounded />
-                            <Col className="mt-2">
-                                <h2>swipe-proto</h2>
-                            </Col>
-                            {button}
-                        </Container>
-                        {!this.state.loadSignUp ?
-                            <React.Fragment>
-                                <Container>
-                                    <LOGIN_FORM
-                                    funcLogin = {this.funcLogin.bind(this)}
-                                    />
-                                </Container>
-                                <Container>
-                                    <Button variant="link" onClick={this.funcLoadSignUp}> Don't have an account? Sign up</Button>
-                                </Container>
-                            </React.Fragment>
-                            :
-                            <React.Fragment>
-                                <Container>
-                                    <h3>Registration</h3>
-                                    <SIGNUP_FORM funcSignUp={this.funcSignUp.bind(this)}/>
-                                </Container>
-                                <Container>
-                                    <Button variant="link" onClick={this.funcLoadSignUp}>Back</Button>
-                                </Container>
-                            </React.Fragment>
-                        }
-                    </Col>
-                </Row>
+                        <Button variant="outline-light" onClick={this.funcLoadSignUp}>Sign Up</Button>
+                    </div>
+                </section>
+                <section className="side-content text-center">
+                    <Container>
+                        <Image src="https://cdn4.iconfinder.com/data/icons/logos-3/426/react_js-512.png" rounded />
+                        <div className="mt-2">
+                            <h2>Swipe-Proto</h2>
+                        </div>
+                        {button}
+                    </Container>
+                    {!this.state.loadSignUp ?
+                        <React.Fragment>
+                            <Container>
+                                {this.state.showAlert ? <div className="invalid-login">Invalid email/password</div> : null}
+                                <LOGIN_FORM
+                                    funcLogin={this.funcLogin.bind(this)}
+                                />
+                            </Container>
+                            <Container>
+                                <Button variant="link" onClick={this.funcLoadSignUp}> Don't have an account? Sign up</Button>
+                            </Container>
+                        </React.Fragment>
+                        :
+                        <React.Fragment>
+                            <Container>
+                                <h4>Registration</h4>
+                                <SIGNUP_FORM funcSignUp={this.funcSignUp.bind(this)} />
+                            </Container>
+                            <Container>
+                                <Button variant="link" onClick={this.funcLoadSignUp}>Back</Button>
+                            </Container>
+                        </React.Fragment>
+                    }
+                </section>
             </div>
         )
     }

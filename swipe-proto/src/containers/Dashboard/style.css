@@ -130,10 +130,6 @@
 
 /* Comment */
 
-.comment .spinner-container {
-    padding-top: 40vh;
-}
-
 .comment-user-profile, .comment-user-profile img {
     width: 45px;
     height: 45px;
@@ -148,8 +144,13 @@
 
 .content-comment {
     flex: auto;
+    position: relative;
     background-color: #fff;
     padding: 20px 0px !important;
+}
+
+.content-comment .spinner-container {
+    padding-top: 30vh;
 }
 
 .card-comment {
@@ -241,12 +242,19 @@
     padding: 20px 20px !important;
 }
 
+.content-profile .spinner-container {
+    padding-top: 30vh;
+}
+
+
 .tab {
+    display: flex;
     text-align: center;
     margin: 0px;
 }
 
 .tab-nav {
+    flex: 1;
     height: 53px;
 }
 

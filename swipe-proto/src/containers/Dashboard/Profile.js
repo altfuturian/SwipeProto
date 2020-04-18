@@ -4,7 +4,7 @@
 /*******************************************/
 
 import React from 'react';
-import { Row, Col, Container, Image, Button } from 'react-bootstrap';
+import { Container, Image, Button } from 'react-bootstrap';
 import LIKE_LIST from './LikeList';
 
 const PROFILE = (props) => {
@@ -33,23 +33,23 @@ const PROFILE = (props) => {
                             />
                         </div>
                         <h5>{props.user_info.username}</h5>
-                        <Button variant="link">Logout</Button> 
+                        <Button variant="link" onClick={props.funcLogout.bind(this)}>Logout</Button> 
                     </div>
                 </Container>
             </div>
             <div>
-                <Row className="tab">
-                    <Col
+                <section className="tab">
+                    <section
                         className={likeTab}
                         onClick={props.funcOnChangeTab.bind(this, 'likes')}>
                         <Container className="nav-tab">Likes</Container>
-                    </Col>
-                    <Col
+                    </section>
+                    <section
                         className={dislikeTab}
                         onClick={props.funcOnChangeTab.bind(this, 'dislikes')}>
                         <Container className="nav-tab">Dislikes</Container>
-                    </Col>
-                </Row>
+                    </section>
+                </section>
             </div>
             <div className="content-profile">
                 <LIKE_LIST
