@@ -1,5 +1,10 @@
+/*******************************************/
+/**    Created by: Carl Jason Tapales     **/
+/**    Modified by: Carl Jason Tapales    **/
+/*******************************************/
+
 import React, { useState } from 'react';
-import { Container, Card } from 'react-bootstrap';
+import { Image, Card, Toast, Spinner } from 'react-bootstrap';
 import { useSprings, animated, interpolate } from 'react-spring';
 import { useGesture } from 'react-use-gesture';
 
@@ -8,8 +13,9 @@ const from = i => ({ x: 0, y: 0, rot: 0 });
 const trans = (r, s) => ``
 
 const LOAD_SWIPE = (props) => {
-    const [gone] = useState(() => new Set())
-    const [prop, set] = useSprings(props.resources.length, i => ({ ...to(i), from: from(i) }))
+    const [gone] = useState(() => new Set());
+    const [empty, setEmpty] = useState(false);
+    const [prop, set] = useSprings(props.resource_list.length, i => ({ ...to(i), from: from(i) }))
 
     const bind = useGesture(({ args: [index], down, delta: [xDelta], distance, direction: [xDir], velocity }) => {
         const trigger = velocity > 0.2;
@@ -17,6 +23,8 @@ const LOAD_SWIPE = (props) => {
         if (!down && trigger) {
             gone.add(index);
             props.funcOnSwipe(index, dir);
+            console.log(gone.size, props.resource_list.length)
+            if(gone.size === props.resource_list.length) setEmpty(true)
         }
         set(i => {
             if (index !== i) return;
@@ -28,7 +36,7 @@ const LOAD_SWIPE = (props) => {
 
     return (
         <React.Fragment>
-            {props.resources && prop.map(({ x, y, rot, scale }, i) => (
+            {props.resource_list && prop.map(({ x, y, rot, scale }, i) => (
                 <animated.div
                     className="animated-parent"
                     key={i}
@@ -40,29 +48,30 @@ const LOAD_SWIPE = (props) => {
                         style={{ transform: interpolate([rot, scale], trans) }}
                     >
                         <Card className="shadow card-swipe">
-                            {props.resources[i]["type"] === "video" ?
+                            {props.resource_list[i]["type"] === "video" ?
                                 <div className="embed-responsive embed-responsive-16by9">
                                     <iframe
-                                        title={props.resources[i]["title"]}
+                                        title={props.resource_list[i]["title"]}
                                         className="embed-responsive-item"
-                                        src={props.resources[i]["res_url"]}
+                                        src={props.resource_list[i]["res_url"]}
                                     />
                                 </div> : null
                             }
-                            {props.resources[i]["type"] === "image" ?
-                                <Card.Img className="img-responsive img-fluid" variant="top" src={props.resources[i]["res_url"]} /> : null
+                            {props.resource_list[i]["type"] === "image" ?
+                                <Card.Img className="img-responsive img-fluid" variant="top" src={props.resource_list[i]["res_url"]} /> : null
                             }
                             <Card.Body>
-                                <Card.Title>{props.resources[i]["title"]}</Card.Title>
-                                <Card.Subtitle className="text-secondary">{props.resources[i]["subtitle"]}</Card.Subtitle>
+                                <Card.Title>{props.resource_list[i]["title"]}</Card.Title>
+                                <Card.Subtitle className="text-secondary">{props.resource_list[i]["subtitle"]}</Card.Subtitle>
                                 <Card.Text
-                                    className={props.resources[i]["type"] === "article" ? "card-article" : ""}
-                                >{props.resources[i]["description"]}</Card.Text>
+                                    className={props.resource_list[i]["type"] === "article" ? "card-article" : ""}
+                                >{props.resource_list[i]["description"]}</Card.Text>
                             </Card.Body>
                         </Card>
                     </animated.div>
                 </animated.div>
             ))}
+            {empty ? <div className="text-secondary empty-list"><h4>No resources available</h4></div> : null   }
         </React.Fragment>
     )
 }
@@ -70,15 +79,32 @@ const LOAD_SWIPE = (props) => {
 const SWIPE_LIST = (props) => {
     return (
         <React.Fragment>
+            {props.isLoading || props.loadCategory ?
+                <div className="spinner-container">
+                    <Spinner variant="primary" animation="border" />
+                </div>
+                : null
+            }
             <section className="header-swipe text-center">
-                <Container>
-                    <h1> Swipe-Proto </h1>
-                </Container>
+                <Image src="https://cdn4.iconfinder.com/data/icons/logos-3/426/react_js-512.png" rounded />
+                <h1> Swipe-Proto </h1>
             </section>
             <section className="content-swipe">
-                {props.resources.length > 0 && props.select_cat.length > 0 ?
+                <Toast onClose={() => props.funcOnLikeToast()}
+                    show={props.succ_like.status}
+                    delay={2000} animation={false}
+                    className={props.succ_like.type === 'like' ? "toast-like" : "toast-dislike"}
+                    autohide>
+                    <Toast.Body
+                    >{props.succ_like.text}</Toast.Body>
+                </Toast>
+                {props.resource_list.length > 0 ?
                     <LOAD_SWIPE {...props} />
-                    : <div className="text-secondary empty-list"><h4>No resources available</h4></div>
+                    : <React.Fragment>
+                        {!props.isLoading && !props.loadCategory ?
+                            <div className="text-secondary empty-list"><h4>No resources available</h4></div> : null
+                        }
+                    </React.Fragment>
                 }
             </section>
         </React.Fragment>

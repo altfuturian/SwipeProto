@@ -1,3 +1,8 @@
+/*******************************************/
+/**    Created by: Carl Jason Tapales     **/
+/**    Modified by: Carl Jason Tapales    **/
+/*******************************************/
+
 import React, { Component } from 'react';
 
 import Login from './containers/Login/Login';
@@ -10,6 +15,7 @@ class App extends Component {
     super(props);
     this.state = {
       user: {},
+      anonymous: false,
       auth: false
     }
   }
@@ -17,7 +23,6 @@ class App extends Component {
   componentDidMount() {
     this.funcAuthListener();
   }
-
 
   funcAuthListener = () => {
     auth.onAuthStateChanged((user) => {
@@ -30,8 +35,8 @@ class App extends Component {
     })
   }
 
-  funcOnSkip = (user) => {
-    this.setState({ user, auth: true });
+  funcOnSkip = () => {
+    this.setState({ anonymous: true, auth: true });
   }
 
   render() {
@@ -40,7 +45,10 @@ class App extends Component {
       <div className="App">
         {this.state.auth ?
           <React.Fragment>
-            {this.state.user ? (<Dashboard {...this.state}/>) : (<Login funcOnSkip={this.funcOnSkip.bind(this)}/>)}
+            {this.state.user || this.state.anonymous ? 
+            <Dashboard {...this.state}/> 
+            : <Login funcOnSkip={this.funcOnSkip.bind(this)}/>
+            }
           </React.Fragment>
           : null
         }
