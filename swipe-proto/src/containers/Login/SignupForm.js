@@ -82,7 +82,7 @@ const SIGNUP_FORM = ({funcSignUp}) => {
                             className="mt-5"
                             disabled={isSubmitting}
                             block
-                        >Login</Button>
+                        >Sign Up</Button>
                     </Form>
                 );
             }}

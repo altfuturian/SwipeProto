@@ -6,7 +6,7 @@
 import React, { Component } from 'react';
 import './style.css';
 
-import { db } from './../../config/Firebase'
+import { auth, db } from './../../config/Firebase'
 
 import * as tbl from './../constants'
 
@@ -65,6 +65,10 @@ class Dashboard extends Component {
                 user_info: USER
             }, () => this.funcFetchCategories())
         }
+    }
+
+    funcLogout = () => {
+        auth.signOut();
     }
 
     funcFetchCategories = () => {
@@ -427,6 +431,7 @@ class Dashboard extends Component {
                         {!this.state.hideProfile
                             ? <PROFILE
                                 {...this.state}
+                                funcLogout={this.funcLogout.bind(this)}
                                 funcModalShow={this.funcModalShow.bind(this)}
                                 funcOnClickProfile={this.funcOnClickProfile.bind(this)}
                                 funcOnChangeTab={this.funcOnChangeTab.bind(this)}

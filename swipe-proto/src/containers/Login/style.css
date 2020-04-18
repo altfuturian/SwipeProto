@@ -1,50 +1,39 @@
-body {
-    overflow-y: hidden;
-}
-
 .main-container {
     min-height: 100vh;
+    display: flex;
 }
 
 .main-content {
+    flex: auto;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    background: 
-        linear-gradient(
-        rgb(100, 185, 255, 0.15), 
-        rgba(100, 185, 255, 0.15)
-        ),
-        url('../../assets/login.jpg');
+    background: linear-gradient( rgb(100, 185, 255, 0.15), rgba(100, 185, 255, 0.15)), url('../../assets/login.jpg');
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center center;
 }
 
-.main-content .container{
-    margin-top: auto;
-    margin-bottom: 20%;
+.main-content div {
+    flex: auto;
+    margin-top: 60vh;
+    margin-left: 30px;
+    padding-right: 10vh;
 }
 
-.main-content .container .col h1,
-.main-content .container .col  p {
+.main-content div h1, .main-content div p {
     color: #fff;
 }
 
-@media (max-width: 1600px) {
-    .side-content img {
-        max-width: 180px;
-    }
+.side-content {
+    min-width: 400px;
 }
 
-@media (max-width: 1200px){
-    .side-content img {
-        max-width: 150px;
-    }
+.side-content img {
+    max-width: 180px;
 }
 
 .side-content .container:first-child {
-    border-bottom: 1px solid rgba(122, 122, 122, 0.685);
     padding: 50px;
     padding-bottom: 10px;
 }
@@ -53,7 +42,7 @@ body {
     padding: 0;
 }
 
-.side-content .container:first-child .col button{
+.side-content .container:first-child .col button {
     margin: 40px 0 20px 0;
 }
 
@@ -61,20 +50,31 @@ body {
     padding: 10px 50px;
 }
 
-.side-content .container:nth-child(2) button{
+.side-content .container:nth-child(2) button {
     margin-top: 60px;
 }
 
-.side-content .container:nth-child(2) form{
-    margin-top: 40px;
+.side-content .container:nth-child(2) form {
+    margin-top: 20px;
 }
-  
-  .input-feedback {
+
+.input-feedback {
     color: rgb(235, 54, 54);
     font-size: 14px;
-  }
-  
+}
 
 .input-feedback {
     text-align: left;
+}
+
+.invalid-login {
+    position: relative;
+    padding: .75rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+    margin: 1.4rem 0px;
 }

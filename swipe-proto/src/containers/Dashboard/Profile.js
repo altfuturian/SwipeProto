@@ -33,7 +33,7 @@ const PROFILE = (props) => {
                             />
                         </div>
                         <h5>{props.user_info.username}</h5>
-                        <Button variant="link">Logout</Button> 
+                        <Button variant="link" onClick={props.funcLogout()}>Logout</Button> 
                     </div>
                 </Container>
             </div>

@@ -3,7 +3,7 @@ import { Button, Form } from 'react-bootstrap';
 import { Formik } from 'formik';
 import * as Yup from "yup";
 
-const LOGIN_FORM = ({funcLogin}) => {
+const LOGIN_FORM = ({ funcLogin }) => {
     return (
         <Formik
             initialValues={{ email: "", password: "" }}
