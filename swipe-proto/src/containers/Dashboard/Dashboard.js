@@ -68,6 +68,7 @@ class Dashboard extends Component {
     }
 
     funcLogout = () => {
+        console.log("LOGOUT")
         auth.signOut();
     }
 
