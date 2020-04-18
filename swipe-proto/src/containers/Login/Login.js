@@ -69,7 +69,7 @@ class Login extends Component {
             <div className="main-container">
                 <section className="main-content">
                     <div>
-                        <h1>Swipe-Proto</h1>
+                        <h1>The Bored App</h1>
                         <p>
                             Oceans and seas supply most of the water that evaporates and then falls as rain in the water cycle.
                             They are salty while rivers and lakes are fresh water.
@@ -82,7 +82,7 @@ class Login extends Component {
                     <Container>
                         <Image src="https://cdn4.iconfinder.com/data/icons/logos-3/426/react_js-512.png" rounded />
                         <div className="mt-2">
-                            <h2>Swipe-Proto</h2>
+                            <h2>The Bored App</h2>
                         </div>
                         {button}
                     </Container>

@@ -23,7 +23,7 @@ const LOAD_SWIPE = (props) => {
         if (!down && trigger) {
             gone.add(index);
             props.funcOnSwipe(index, dir);
-            if(gone.size === props.resource_list.length) setEmpty(true)
+            if (gone.size === props.resource_list.length) setEmpty(true)
         }
         set(i => {
             if (index !== i) return;
@@ -57,7 +57,9 @@ const LOAD_SWIPE = (props) => {
                                 </div> : null
                             }
                             {props.resource_list[i]["type"] === "image" ?
-                                <Card.Img className="img-responsive img-fluid" variant="top" src={props.resource_list[i]["res_url"]} /> : null
+                                <div className="img-container">
+                                    <Image className="mx-auto d-block" variant="top" src={props.resource_list[i]["res_url"]} />
+                                </div> : null
                             }
                             <Card.Body>
                                 <Card.Title>{props.resource_list[i]["title"]}</Card.Title>
@@ -70,7 +72,7 @@ const LOAD_SWIPE = (props) => {
                     </animated.div>
                 </animated.div>
             ))}
-            {empty ? <div className="text-secondary empty-list"><h4>No resources available</h4></div> : null   }
+            {empty ? <div className="text-secondary empty-list"><h4>No resources available</h4></div> : null}
         </React.Fragment>
     )
 }
@@ -78,7 +80,7 @@ const LOAD_SWIPE = (props) => {
 const SWIPE_LIST = (props) => {
     return (
         <React.Fragment>
-            {props.isLoading || props.loadCategory ?
+            {props.is_loading === 1 || props.load_category === 1 ?
                 <div className="spinner-container">
                     <Spinner variant="primary" animation="border" />
                 </div>
@@ -86,7 +88,7 @@ const SWIPE_LIST = (props) => {
             }
             <section className="header-swipe text-center">
                 <Image src="https://cdn4.iconfinder.com/data/icons/logos-3/426/react_js-512.png" rounded />
-                <h1> Swipe-Proto </h1>
+                <h1> The Bored App </h1>
             </section>
             <section className="content-swipe">
                 <Toast onClose={() => props.funcOnLikeToast()}
@@ -100,7 +102,7 @@ const SWIPE_LIST = (props) => {
                 {props.resource_list.length > 0 ?
                     <LOAD_SWIPE {...props} />
                     : <React.Fragment>
-                        {!props.isLoading && !props.loadCategory ?
+                        {props.is_loading === 0 && props.load_category === 0 ?
                             <div className="text-secondary empty-list"><h4>No resources available</h4></div> : null
                         }
                     </React.Fragment>

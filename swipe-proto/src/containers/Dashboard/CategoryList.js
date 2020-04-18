@@ -9,7 +9,7 @@ import { Row, Col, Card, Container, Button, Spinner, Toast } from 'react-bootstr
 const LOAD_CONTENT = (props) => {
     let grid = [];
 
-    if (props.list && props.loadCategory === false) {
+    if (props.list && props.load_category === 0) {
         for (let i = 0; i < props.list.length; i) {
             let columns = [];
 
@@ -48,7 +48,7 @@ const LOAD_CONTENT = (props) => {
 const CATEGORY_LIST = (props) => {
     return (
         <React.Fragment>
-            {props.loadCategory ?
+            {props.load_category === 1 ?
                 <div className="spinner-container">
                     <Spinner variant="primary" animation="border" />
                 </div>
@@ -64,17 +64,17 @@ const CATEGORY_LIST = (props) => {
             <section className="content-category overflow-auto">
                 <Toast
                     onClose={() => props.funcOnCategoryCounter()}
-                    show={props.selectionCounter.status}
+                    show={props.selection_counter.status}
                     delay={1000} animation={false}
-                    className={props.selectionCounter.type === 'success' ? "success" : "danger"}
+                    className={props.selection_counter.type === 'success' ? "success" : "danger"}
                     autohide>
-                    <Toast.Body>{props.selectionCounter.text}</Toast.Body>
+                    <Toast.Body>{props.selection_counter.text}</Toast.Body>
                 </Toast>
                 <LOAD_CONTENT
                     list={props.category_list}
                     funcOnSelectCategory={props.funcOnSelectCategory}
                     select_cat={props.select_cat}
-                    loadCategory={props.loadCategory}
+                    load_category={props.load_category}
                 />
             </section>
             <section className="text-center footer-category d-flex">
@@ -82,7 +82,7 @@ const CATEGORY_LIST = (props) => {
                     <Button
                         onClick={props.funcOnGenerateItems.bind(this)}
                         className=" btn-generate w-100"
-                        disabled={props.loadCategory || props.isLoading}>Generate Items</Button>
+                        disabled={props.load_category === 1 || props.is_loading === 1}>Generate Items</Button>
                 </div>
             </section>
         </React.Fragment>

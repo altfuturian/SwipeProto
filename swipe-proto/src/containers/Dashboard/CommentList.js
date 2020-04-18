@@ -47,7 +47,7 @@ const COMMENT_LIST = (props) => {
                                 <h3> Comment </h3>
                             </Col>
                             <Col className="text-right">
-                                {!props.anonymous ?
+                                {props.anonymous === 0 ?
                                     <div className="comment-user-profile">
                                         <Image
                                             onClick={props.funcOnClickProfile.bind(this)}
@@ -65,7 +65,7 @@ const COMMENT_LIST = (props) => {
                 </Col>
             </section>
             <section className="content-comment overflow-auto">
-                {props.isLoading || props.loadCategory ?
+                {props.is_loading === 1 || props.load_category === 1 ?
                     <div className="spinner-container">
                         <Spinner variant="primary" animation="border" />
                     </div>
@@ -76,7 +76,7 @@ const COMMENT_LIST = (props) => {
                         list={props.comment_list}
                     />
                     : <React.Fragment>
-                        {!props.isLoading && !props.loadCategory ?
+                        {props.is_loading === 0 && props.load_category === 0?
                             <div className="text-secondary empty-list"><h4>No comments available</h4></div> : null
                         }
                     </React.Fragment>
@@ -98,7 +98,7 @@ const COMMENT_LIST = (props) => {
                     <Button
                         variant="primary"
                         className="w-100"
-                        disabled={props.isLoading || !props.top_res || props.anonymous}
+                        disabled={props.is_loading === 1 || !props.top_res || props.anonymous === 1}
                         onClick={() => {
                             props.funcOnSubmitComment(comment);
                             setComment('');

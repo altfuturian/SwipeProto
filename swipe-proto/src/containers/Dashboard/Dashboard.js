@@ -15,26 +15,27 @@ import COMMENT_LIST from './CommentList';
 import SWIPE_LIST from './SwipeList';
 import PROFILE from './Profile';
 import LIKE_MODAL from './LikeModal';
+import SHARE_MODAL from './ShareModal';
 
 class Dashboard extends Component {
     constructor(props) {
         super(props);
         this.funcOnBack = props.funcOnBack.bind(this);
         this.state = {
-            anonymous: false,
-            selectionCounter: {
+            anonymous: 0,
+            selection_counter: {
                 status: false
             },
-            activeTab: 'likes',
-            loadCategory: true,
-            isLoading: false,
-            loadLike: false,
-            hideProfile: true,
+            active_tab: 'likes',
+            load_category: 1,
+            is_loading: 0,
+            load_like: false,
+            hide_profile: true,
             top_res: null,
-            consistLike: false,
-            consistDislike: false,
-            modalShow: false,
-            modalReady: true,
+            consist_like: false,
+            consist_dislike: false,
+            modal_show_like: false,
+            modal_show_share: false,
             user_info: {},
             succ_like: {
                 status: false,
@@ -51,9 +52,9 @@ class Dashboard extends Component {
     }
 
     componentDidMount = () => {
-        if (this.props.anonymous) {
+        if (this.props.anonymous === 1) {
             this.setState({
-                anonymous: this.props.anonymous
+                anonymous: 1
             }, () => this.funcFetchCategories())
         } else {
             const USER = {
@@ -83,7 +84,7 @@ class Dashboard extends Component {
                 });
                 this.setState({
                     category_list: categories,
-                    loadCategory: false
+                    load_category: 0
                 });
             });
     }
@@ -96,14 +97,14 @@ class Dashboard extends Component {
             this.state.select_cat.forEach(function (category) {
                 selected.push(category.id);
             })
-            this.setState({ isLoading: !this.state.isLoading },
+            this.setState({ is_loading: 0 },
                 () => this.funcFetchResources(resRef.where('categoryid', 'in', selected))
             );
         } else {
             this.setState({
                 resource_list: [],
                 comment_list: [],
-                isLoading: !this.state.isLoading
+                is_loading: 0
             })
         }
     }
@@ -127,7 +128,7 @@ class Dashboard extends Component {
                                 let resource = res_doc.data();
                                 resource.id = res_doc.id;
 
-                                if (his_querySnapshot.empty === false && !anonymous) {
+                                if (his_querySnapshot.empty === false && anonymous === 0) {
                                     let found = false;
                                     his_querySnapshot.forEach(function (his_doc) {
                                         if (resource.id === his_doc.data().resourceid
@@ -147,7 +148,7 @@ class Dashboard extends Component {
                         resource_list: resources,
                         comment_list: [],
                         top_res: null,
-                        isLoading: !this.state.isLoading
+                        is_loading: 0
                     });
                 }
             });
@@ -180,17 +181,17 @@ class Dashboard extends Component {
                                 })
                                 comments.push(comment);
                             });
-                            this.setState({ comment_list: comments, isLoading: false });
+                            this.setState({ comment_list: comments, is_loading: 0 });
                         })
                 })
-        } else this.setState({ comment_list: [], isLoading: false });
+        } else this.setState({ comment_list: [], is_loading: 0 });
     }
 
     funcFetchLike = () => {
         let resRef = db.collection(tbl.RESOURCES);
         let catRef = db.collection(tbl.CATEGORIES);
-        let consistLike = false;
-        let consistDislike = false;
+        let consist_like = false;
+        let consist_dislike = false;
 
         db.collection(tbl.HISTORY)
             .where("userid", "==", this.state.user_info.id)
@@ -210,11 +211,11 @@ class Dashboard extends Component {
 
                                         switch (like.status) {
                                             case 'like': {
-                                                consistLike = true;
+                                                consist_like = true;
                                                 break;
                                             }
                                             case 'dislike': {
-                                                consistDislike = true;
+                                                consist_dislike = true;
                                                 break;
                                             }
                                             default: break;
@@ -224,8 +225,11 @@ class Dashboard extends Component {
                                             if (res_doc.id === like.resourceid) {
                                                 let resource = res_doc.data();
                                                 like.resid = res_doc.id;
+                                                like.res_url = resource.res_url;
                                                 like.title = resource.title;
+                                                like.type = resource.type;
                                                 like.subtitle = resource.subtitle
+                                                like.description = resource.description;
                                                 like.categoryid = resource.categoryid;
                                                 cat_querySnapshot.forEach(function (cat_doc) {
                                                     if (cat_doc.id === like.categoryid) {
@@ -239,43 +243,19 @@ class Dashboard extends Component {
                                     })
                                     this.setState({
                                         like_list: likes,
-                                        loadLike: false,
-                                        consistDislike: consistDislike,
-                                        consistLike: consistLike
+                                        load_like: false,
+                                        consist_dislike: consist_dislike,
+                                        consist_like: consist_like
                                     })
                                 })
                         })
                 } else this.setState({
                     like_list: [],
-                    loadLike: false,
-                    consistDislike: consistDislike,
-                    consistLike: consistLike
+                    load_like: false,
+                    consist_dislike: consist_dislike,
+                    consist_like: consist_like
                 })
             })
-    }
-
-    funcFetchModalDetails = (modal_details) => {
-        let resRef = db.collection(tbl.RESOURCES);
-
-        resRef
-            .get()
-            .then((res_querySnapshot) => {
-
-                let modal = {};
-
-                res_querySnapshot.forEach((res_doc) => {
-                    if (res_doc.id === modal_details.resid) {
-                        let resource = res_doc.data();
-                        modal = resource;
-                        modal.category = modal_details.category;
-                    }
-                })
-                this.setState({
-                    modal_details: modal,
-                    modalReady: !this.state.modalReady
-                })
-            })
-
     }
 
     funcOnSelectCategory = (category) => {
@@ -295,7 +275,7 @@ class Dashboard extends Component {
 
             this.setState({
                 select_cat: newSelection,
-                selectionCounter: selectionStatus
+                selection_counter: selectionStatus
             })
         } else {
             let selectionStatus = [];
@@ -303,7 +283,7 @@ class Dashboard extends Component {
                 selectionStatus.status = true;
                 selectionStatus.type = "danger";
                 selectionStatus.text = "Maximum number of categories selected"
-                this.setState({ selectionCounter: selectionStatus })
+                this.setState({ selection_counter: selectionStatus })
             } else {
                 selectionStatus.status = true;
                 selectionStatus.type = "success";
@@ -313,7 +293,7 @@ class Dashboard extends Component {
                 else selectionStatus.text = select_cat.length + 1 + " category selected"
                 this.setState({
                     select_cat: [...select_cat, category],
-                    selectionCounter: selectionStatus
+                    selection_counter: selectionStatus
                 });
             }
         }
@@ -331,15 +311,15 @@ class Dashboard extends Component {
 
     funcOnClickProfile = () => {
         this.setState({
-            hideProfile: !this.state.hideProfile,
+            hide_profile: !this.state.hide_profile,
             like_list: [],
-            loadLike: true
+            load_like: true
         }, () => this.funcFetchLike());
     }
 
     funcOnChangeTab = (e) => {
         this.setState({
-            activeTab: e
+            active_tab: e
         });
     }
 
@@ -366,9 +346,9 @@ class Dashboard extends Component {
         this.setState({
             top_res: top_res,
             succ_like: alert,
-            isLoading: !this.state.isLoading
+            is_loading: 0
         }, () => {
-            if (!this.state.anonymous) {
+            if (this.state.anonymous === 0) {
                 db.collection(tbl.HISTORY).add({
                     userid: this.state.user_info.id,
                     resourceid: resourceid,
@@ -391,18 +371,22 @@ class Dashboard extends Component {
     funcOnCategoryCounter = () => {
         let selectionStatus = [];
         selectionStatus.status = false;
-        this.setState({ selectionCounter: selectionStatus });
+        this.setState({ selection_counter: selectionStatus });
     }
 
-    funcModalShow = (modal_details, value) => {
+    funcModalShowLike = (modal_details, value) => {
         this.setState({
-            modal_details: {},
-            modalShow: value,
-            modalReady: !this.state.modalReady
-        }, () => {
-            if (this.state.modalShow) this.funcFetchModalDetails(modal_details);
-        })
+            modal_details: modal_details,
+            modal_show_like: value
+        });
     }
+
+    funcModalShowShare = (modal_details, value) => {
+        this.setState({
+            modal_details: modal_details,
+            modal_show_share: value
+        });
+    } 
 
     render() {
         return (
@@ -424,11 +408,12 @@ class Dashboard extends Component {
                         />
                     </div>
                     <div className="comment">
-                        {!this.state.hideProfile
+                        {!this.state.hide_profile
                             ? <PROFILE
                                 {...this.state}
                                 funcLogout={this.funcLogout.bind(this)}
-                                funcModalShow={this.funcModalShow.bind(this)}
+                                funcModalShowLike={this.funcModalShowLike.bind(this)}
+                                funcModalShowShare={this.funcModalShowShare.bind(this)}
                                 funcOnClickProfile={this.funcOnClickProfile.bind(this)}
                                 funcOnChangeTab={this.funcOnChangeTab.bind(this)}
                             /> : <COMMENT_LIST
@@ -443,8 +428,13 @@ class Dashboard extends Component {
                 </section>
                 <LIKE_MODAL
                     {...this.state}
-                    show={this.state.modalShow}
-                    onHide={() => this.funcModalShow(false)}
+                    show={this.state.modal_show_like}
+                    onHide={() => this.funcModalShowLike(false)}
+                />
+                <SHARE_MODAL
+                    {...this.state}
+                    show={this.state.modal_show_share}
+                    onHide={() => this.funcModalShowShare(false)}
                 />
             </React.Fragment>
         )

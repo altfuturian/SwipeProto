@@ -15,7 +15,7 @@ class App extends Component {
     super(props);
     this.state = {
       user: {},
-      anonymous: false,
+      anonymous: 0,
       auth: false
     }
   }
@@ -36,11 +36,11 @@ class App extends Component {
   }
 
   funcOnSkip = () => {
-    this.setState({ anonymous: true, auth: true });
+    this.setState({ anonymous: 1, auth: true });
   }
 
   funcOnBack = () => {
-    this.setState({user: null, anonymous: false, auth: true })
+    this.setState({user: null, anonymous: 0, auth: true })
   }
 
   render() {
@@ -48,7 +48,7 @@ class App extends Component {
       <div className="App">
         {this.state.auth ?
           <React.Fragment>
-            {this.state.user || this.state.anonymous ? 
+            {this.state.user || this.state.anonymous === 1 ? 
             <Dashboard {...this.state} funcOnBack={this.funcOnBack.bind()}/> 
             : <Login funcOnSkip={this.funcOnSkip.bind(this)}/>
             }

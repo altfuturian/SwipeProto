@@ -11,7 +11,7 @@ const PROFILE = (props) => {
     let likeTab = "tab-nav d-flex align-items-center";
     let dislikeTab = "tab-nav d-flex align-items-center";
 
-    if (props.activeTab === 'likes') {
+    if (props.active_tab === 'likes') {
         likeTab = likeTab.concat(' tab-active');
     } else {
         dislikeTab = dislikeTab.concat(' tab-active');
@@ -53,7 +53,7 @@ const PROFILE = (props) => {
             <div className="content-profile">
                 <LIKE_LIST
                     {...props}
-                    type={props.activeTab}
+                    type={props.active_tab}
                 />
             </div>
         </React.Fragment>

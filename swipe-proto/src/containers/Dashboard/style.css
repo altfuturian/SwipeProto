@@ -41,6 +41,10 @@
     align-content: stretch;
 }
 
+.img-container {
+    background-color: black;
+}
+
 .category, .comment, .profile {
     flex: 1;
     display: flex;
@@ -338,7 +342,7 @@
 
 .header-swipe h1 {
     display: inline-block;
-    width: 250px;
+    width: 300px;
     margin: 0px;
 }
 
@@ -422,7 +426,7 @@
     border-color: #ffeeba;
 }
 
-.modal-content {
+.modal-like .modal-content {
     width: 600px;
     height: 90vh;
     margin: auto;
@@ -443,7 +447,7 @@
 }
 
 .modal-like img {
-    height: 60vh;
+    height: 40vh
 }
 
 .modal-like .text {
@@ -460,4 +464,8 @@
 
 .modal-like .modal-article {
     height: 57vh;
+}
+
+.modal-like .modal-image {
+    height: 25vh;
 }

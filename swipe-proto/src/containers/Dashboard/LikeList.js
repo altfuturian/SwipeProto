@@ -24,13 +24,13 @@ const LOAD_LIKES = (props) => {
                                             <Card.Subtitle>{like.subtitle}</Card.Subtitle>
                                         </Col>
                                         <Col>
-                                            <i className="fa fa-share" />
+                                            <i onClick={props.funcModalShowShare.bind(this, like, true)} className="fa fa-share" />
                                         </Col>
                                     </Row>
                                     <div className="w-100 text-right">
                                         <Button
                                             variant="danger"
-                                            onClick={props.funcModalShow.bind(this, like, true)}
+                                            onClick={props.funcModalShowLike.bind(this, like, true)}
                                         >See more</Button>
                                     </div>
                                 </Card.Body>
@@ -39,7 +39,7 @@ const LOAD_LIKES = (props) => {
                     </React.Fragment>
                 )
             })}
-            {!props.consistLike && !props.loadLike ? <div className="text-secondary empty-list"><h4>No Likes available</h4></div> : null}
+            {!props.consist_like && !props.load_like ? <div className="text-secondary empty-list"><h4>No Likes available</h4></div> : null}
         </React.Fragment>
     )
 }
@@ -78,7 +78,7 @@ const LOAD_DISLIKES = (props) => {
                     </React.Fragment>
                 )
             })}
-            {!props.consistDislike && !props.loadLike ? <div className="text-secondary empty-list"><h4>No Dislikes available</h4></div> : null}
+            {!props.consist_dislike && !props.load_like ? <div className="text-secondary empty-list"><h4>No Dislikes available</h4></div> : null}
         </React.Fragment>
     )
 }
@@ -87,13 +87,13 @@ const LOAD_DISLIKES = (props) => {
 const LIKE_LIST = (props) => {
     return (
         <React.Fragment>
-            {props.loadLike ?
+            {props.load_like ?
                 <div className="spinner-container">
                     <Spinner variant="primary" animation="border" />
                 </div>
                 : null
             }
-            {props.activeTab === 'likes' ?
+            {props.active_tab === 'likes' ?
                 <LOAD_LIKES {...props} />
                 :
                 <LOAD_DISLIKES {...props} />
