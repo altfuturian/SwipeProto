@@ -39,6 +39,11 @@ class App extends Component {
     this.setState({ anonymous: true, auth: true });
   }
 
+  funcOnBack = () => {
+    console.log("BACK")
+    this.setState({user: null, anonymous: false, auth: true })
+  }
+
   render() {
     console.log(this.state)
     return (
@@ -46,7 +51,7 @@ class App extends Component {
         {this.state.auth ?
           <React.Fragment>
             {this.state.user || this.state.anonymous ? 
-            <Dashboard {...this.state}/> 
+            <Dashboard {...this.state} funcOnBack={this.funcOnBack.bind()}/> 
             : <Login funcOnSkip={this.funcOnSkip.bind(this)}/>
             }
           </React.Fragment>

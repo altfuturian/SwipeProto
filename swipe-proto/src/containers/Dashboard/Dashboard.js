@@ -19,6 +19,7 @@ import LIKE_MODAL from './LikeModal';
 class Dashboard extends Component {
     constructor(props) {
         super(props);
+        this.funcOnBack = props.funcOnBack.bind(this);
         this.state = {
             anonymous: false,
             selectionCounter: {
@@ -439,6 +440,7 @@ class Dashboard extends Component {
                             /> : <COMMENT_LIST
                                 {...this.state}
                                 {...this.props}
+                                funcOnBack={this.funcOnBack.bind(this)}
                                 funcOnSubmitComment={this.funcOnSubmitComment}
                                 funcOnClickProfile={this.funcOnClickProfile.bind(this)}
                             />

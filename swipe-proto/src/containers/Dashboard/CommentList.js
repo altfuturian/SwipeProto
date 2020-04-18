@@ -54,7 +54,10 @@ const COMMENT_LIST = (props) => {
                                             src="https://cdn4.iconfinder.com/data/icons/logos-3/426/react_js-512.png"
                                             alt="avatar"
                                         />
-                                    </div> : null
+                                    </div> : 
+                                    <div className="btn-back">
+                                    <Button variant="link" onClick={props.funcOnBack.bind(this)}>Back</Button> 
+                                    </div>
                                 }
                             </Col>
                         </Row>
