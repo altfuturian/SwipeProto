@@ -28,7 +28,10 @@ const LOAD_LIKES = (props) => {
                                         </Col>
                                     </Row>
                                     <div className="w-100 text-right">
-                                        <Button variant="danger">See more</Button>
+                                        <Button
+                                            variant="danger"
+                                            onClick={props.funcModalShow.bind(this, like, true)}
+                                        >See more</Button>
                                     </div>
                                 </Card.Body>
                             </Card> : null
@@ -36,7 +39,7 @@ const LOAD_LIKES = (props) => {
                     </React.Fragment>
                 )
             })}
-            {!props.consistLike  && !props.loadLike ? <div className="text-secondary empty-list"><h4>No Likes available</h4></div> : null}
+            {!props.consistLike && !props.loadLike ? <div className="text-secondary empty-list"><h4>No Likes available</h4></div> : null}
         </React.Fragment>
     )
 }
@@ -64,7 +67,10 @@ const LOAD_DISLIKES = (props) => {
                                         </Col>
                                     </Row>
                                     <div className="w-100 text-right">
-                                        <Button variant="danger">See more</Button>
+                                        <Button
+                                            variant="danger"
+                                            onClick={props.funcModalShow.bind(this, like, true)}
+                                        >See more</Button>
                                     </div>
                                 </Card.Body>
                             </Card> : null
@@ -88,10 +94,10 @@ const LIKE_LIST = (props) => {
                 : null
             }
             {props.activeTab === 'likes' ?
-                    <LOAD_LIKES {...props} />
-                    :
-                    <LOAD_DISLIKES {...props} />
-                }
+                <LOAD_LIKES {...props} />
+                :
+                <LOAD_DISLIKES {...props} />
+            }
         </React.Fragment>
     )
 }

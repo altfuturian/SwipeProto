@@ -14,6 +14,7 @@ import CATEGORY_LIST from './CategoryList';
 import COMMENT_LIST from './CommentList';
 import SWIPE_LIST from './SwipeList';
 import PROFILE from './Profile';
+import LIKE_MODAL from './LikeModal';
 
 class Dashboard extends Component {
     constructor(props) {
@@ -31,6 +32,8 @@ class Dashboard extends Component {
             top_res: null,
             consistLike: false,
             consistDislike: false,
+            modalShow: false,
+            modalReady: true,
             user_info: {},
             succ_like: {
                 status: false,
@@ -41,7 +44,8 @@ class Dashboard extends Component {
             category_list: [],
             comment_list: [],
             resource_list: [],
-            like_list: []
+            like_list: [],
+            modal_details: {}
         };
     }
 
@@ -105,6 +109,7 @@ class Dashboard extends Component {
     funcFetchResources = (resRef) => {
         let hisRef = db.collection(tbl.HISTORY);
         let anonymous = this.state.anonymous;
+        let userid = this.state.user_info.userid;
         resRef
             .orderBy("updated_at")
             .get()
@@ -124,7 +129,7 @@ class Dashboard extends Component {
                                     let found = false;
                                     his_querySnapshot.forEach(function (his_doc) {
                                         if (resource.id === his_doc.data().resourceid
-                                            && his_doc.data().userid === this.state.user_info.userid) found = true;
+                                            && his_doc.data().userid === userid) found = true;
                                     })
                                     if (!found) resources.push(resource);
                                 } else resources.push(resource);
@@ -216,6 +221,7 @@ class Dashboard extends Component {
                                         res_querySnapshot.forEach(function (res_doc) {
                                             if (res_doc.id === like.resourceid) {
                                                 let resource = res_doc.data();
+                                                like.resid = res_doc.id;
                                                 like.title = resource.title;
                                                 like.subtitle = resource.subtitle
                                                 like.categoryid = resource.categoryid;
@@ -244,6 +250,30 @@ class Dashboard extends Component {
                     consistLike: consistLike
                 })
             })
+    }
+
+    funcFetchModalDetails = (modal_details) => {
+        let resRef = db.collection(tbl.RESOURCES);
+
+        resRef
+            .get()
+            .then((res_querySnapshot) => {
+
+                let modal = {};
+
+                res_querySnapshot.forEach((res_doc) => {
+                    if (res_doc.id === modal_details.resid) {
+                        let resource = res_doc.data();
+                        modal = resource;
+                        modal.category = modal_details.category;
+                    }
+                })
+                this.setState({
+                    modal_details: modal,
+                    modalReady: !this.state.modalReady
+                })
+            })
+
     }
 
     funcOnSelectCategory = (category) => {
@@ -362,40 +392,59 @@ class Dashboard extends Component {
         this.setState({ selectionCounter: selectionStatus });
     }
 
+    funcModalShow = (modal_details, value) => {
+        console.log(modal_details);
+        this.setState({
+            modal_details: {},
+            modalShow: value,
+            modalReady: !this.state.modalReady
+        }, () => {
+            if (this.state.modalShow) this.funcFetchModalDetails(modal_details);
+        })
+    }
+
     render() {
         console.log(this.state)
         return (
-            <section className="main-container">
-                <div className="category">
-                    <CATEGORY_LIST
-                        {...this.state}
-                        funcOnCategoryCounter={this.funcOnCategoryCounter.bind(this)}
-                        funcOnSelectCategory={this.funcOnSelectCategory.bind(this)}
-                        funcOnGenerateItems={this.funcOnGenerateItems.bind(this)}
-                    />
-                </div>
-                <div className="content">
-                    <SWIPE_LIST
-                        {...this.state}
-                        funcOnSwipe={this.funcOnSwipe.bind(this)}
-                        funcOnLikeToast={this.funcOnLikeToast.bind(this)}
-                    />
-                </div>
-                <div className="comment">
-                    {!this.state.hideProfile
-                        ? <PROFILE
+            <React.Fragment>
+                <section className="main-container">
+                    <div className="category">
+                        <CATEGORY_LIST
                             {...this.state}
-                            funcOnClickProfile={this.funcOnClickProfile.bind(this)}
-                            funcOnChangeTab={this.funcOnChangeTab.bind(this)}
-                        /> : <COMMENT_LIST
-                            {...this.state}
-                            {...this.props}
-                            funcOnSubmitComment={this.funcOnSubmitComment}
-                            funcOnClickProfile={this.funcOnClickProfile.bind(this)}
+                            funcOnCategoryCounter={this.funcOnCategoryCounter.bind(this)}
+                            funcOnSelectCategory={this.funcOnSelectCategory.bind(this)}
+                            funcOnGenerateItems={this.funcOnGenerateItems.bind(this)}
                         />
-                    }
-                </div>
-            </section>
+                    </div>
+                    <div className="content">
+                        <SWIPE_LIST
+                            {...this.state}
+                            funcOnSwipe={this.funcOnSwipe.bind(this)}
+                            funcOnLikeToast={this.funcOnLikeToast.bind(this)}
+                        />
+                    </div>
+                    <div className="comment">
+                        {!this.state.hideProfile
+                            ? <PROFILE
+                                {...this.state}
+                                funcModalShow={this.funcModalShow.bind(this)}
+                                funcOnClickProfile={this.funcOnClickProfile.bind(this)}
+                                funcOnChangeTab={this.funcOnChangeTab.bind(this)}
+                            /> : <COMMENT_LIST
+                                {...this.state}
+                                {...this.props}
+                                funcOnSubmitComment={this.funcOnSubmitComment}
+                                funcOnClickProfile={this.funcOnClickProfile.bind(this)}
+                            />
+                        }
+                    </div>
+                </section>
+                <LIKE_MODAL
+                    {...this.state}
+                    show={this.state.modalShow}
+                    onHide={() => this.funcModalShow(false)}
+                />
+            </React.Fragment>
         )
     }
 }

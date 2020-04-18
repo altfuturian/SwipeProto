@@ -62,7 +62,7 @@
     padding-left: 0px !important;
 }
 
-.category .spinner-container{
+.category .spinner-container {
     padding-top: 40vh;
 }
 
@@ -85,13 +85,13 @@
     bottom: 0;
 }
 
-.content-category  .success{
+.content-category .success {
     color: #155724;
     background-color: #d4edda;
     border-color: #c3e6cb;
 }
 
-.content-category .danger{
+.content-category .danger {
     color: #721c24;
     background-color: #f8d7da;
     border-color: #f5c6cb;
@@ -129,6 +129,7 @@
 }
 
 /* Comment */
+
 .comment .spinner-container {
     padding-top: 40vh;
 }
@@ -191,6 +192,7 @@
 }
 
 /* Profile */
+
 .header-profile {
     height: 100px;
 }
@@ -233,6 +235,7 @@
 }
 
 .content-profile {
+    position: relative;
     flex: 2;
     overflow: auto;
     padding: 20px 20px !important;
@@ -406,4 +409,44 @@
     color: #856404;
     background-color: #fff3cd;
     border-color: #ffeeba;
+}
+
+.modal-content {
+    width: 600px;
+    height: 90vh;
+    margin: auto;
+}
+
+.modal-header {
+    color: #dc3545;
+}
+
+.modal-like .spinner-container {
+    padding-top: 40vh;
+}
+
+.modal-like .title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: .75rem;
+}
+
+.modal-like img {
+    height: 60vh;
+}
+
+.modal-like .text {
+    overflow: auto;
+    height: 30vh;
+    margin: 10px 0px 20px;
+}
+
+.modal-like .text {
+    overflow: auto;
+    height: 30vh;
+    margin: 10px 0px 20px;
+}
+
+.modal-like .modal-article {
+    height: 57vh;
 }
