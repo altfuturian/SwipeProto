@@ -137,6 +137,10 @@
     margin-left: auto;
 }
 
+.btn-back {
+    margin-top: 5px;
+}
+
 .comment-user-profile:hover {
     opacity: 0.7;
     cursor: pointer;
@@ -245,7 +249,6 @@
 .content-profile .spinner-container {
     padding-top: 30vh;
 }
-
 
 .tab {
     display: flex;
