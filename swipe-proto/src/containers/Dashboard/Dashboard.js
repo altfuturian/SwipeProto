@@ -51,9 +51,7 @@ class Dashboard extends Component {
     }
 
     componentDidMount = () => {
-        console.log("PROPS: ", this.props)
         if (this.props.anonymous) {
-            console.log(this.props.anonymous)
             this.setState({
                 anonymous: this.props.anonymous
             }, () => this.funcFetchCategories())
@@ -69,7 +67,6 @@ class Dashboard extends Component {
     }
 
     funcLogout = () => {
-        console.log("LOGOUT")
         auth.signOut();
     }
 
@@ -92,7 +89,6 @@ class Dashboard extends Component {
     }
 
     funcOnGenerateItems = () => {
-        console.log(this.state)
         if (Array.isArray(this.state.select_cat)
             && this.state.select_cat.length > 0) {
             let resRef = db.collection(tbl.RESOURCES);
@@ -399,7 +395,6 @@ class Dashboard extends Component {
     }
 
     funcModalShow = (modal_details, value) => {
-        console.log(modal_details);
         this.setState({
             modal_details: {},
             modalShow: value,
@@ -410,7 +405,6 @@ class Dashboard extends Component {
     }
 
     render() {
-        console.log(this.state)
         return (
             <React.Fragment>
                 <section className="main-container">

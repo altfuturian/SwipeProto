@@ -10,7 +10,6 @@ const SIGNUP_FORM = ({funcSignUp}) => {
             onSubmit={(values, { setSubmitting }) => {
                 setTimeout(() => {
                     funcSignUp(values.email, values.password);
-                    console.log(values)
                     setSubmitting(false);
                 }, 500);
             }}

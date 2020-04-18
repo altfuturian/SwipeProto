@@ -8,7 +8,6 @@ import { Container, Image, Button } from 'react-bootstrap';
 import LIKE_LIST from './LikeList';
 
 const PROFILE = (props) => {
-    console.log("PROF: ", props.user)
     let likeTab = "tab-nav d-flex align-items-center";
     let dislikeTab = "tab-nav d-flex align-items-center";
 

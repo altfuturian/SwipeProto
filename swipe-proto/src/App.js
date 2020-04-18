@@ -40,12 +40,10 @@ class App extends Component {
   }
 
   funcOnBack = () => {
-    console.log("BACK")
     this.setState({user: null, anonymous: false, auth: true })
   }
 
   render() {
-    console.log(this.state)
     return (
       <div className="App">
         {this.state.auth ?

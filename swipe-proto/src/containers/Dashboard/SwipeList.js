@@ -23,7 +23,6 @@ const LOAD_SWIPE = (props) => {
         if (!down && trigger) {
             gone.add(index);
             props.funcOnSwipe(index, dir);
-            console.log(gone.size, props.resource_list.length)
             if(gone.size === props.resource_list.length) setEmpty(true)
         }
         set(i => {
