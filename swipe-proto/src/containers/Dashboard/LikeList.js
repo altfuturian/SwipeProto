@@ -50,9 +50,9 @@ const LOAD_DISLIKES = (props) => {
         <React.Fragment>
             {props.like_list && props.like_list.map((like) => {
                 return (
-                    <React.Fragment key={like.category_id}>
+                    <React.Fragment key={like.id}>
                         {like.status === "dislike" ?
-                            <Card key={like.category_id} className="card-like">
+                            <Card key={like.id} className="card-like">
                                 <Card.Body>
                                     <Row>
                                         <Col className="col-8">
@@ -63,13 +63,13 @@ const LOAD_DISLIKES = (props) => {
                                             <Card.Subtitle>{like.subtitle}</Card.Subtitle>
                                         </Col>
                                         <Col>
-                                            <i className="fa fa-share" />
+                                            <i onClick={props.funcModalShowShare.bind(this, like, true)} className="fa fa-share" />
                                         </Col>
                                     </Row>
                                     <div className="w-100 text-right">
                                         <Button
                                             variant="danger"
-                                            onClick={props.funcModalShow.bind(this, like, true)}
+                                            onClick={props.funcModalShowLike.bind(this, like, true)}
                                         >See more</Button>
                                     </div>
                                 </Card.Body>
@@ -78,7 +78,7 @@ const LOAD_DISLIKES = (props) => {
                     </React.Fragment>
                 )
             })}
-            {!props.consist_dislike && !props.load_like ? <div className="text-secondary empty-list"><h4>No Dislikes available</h4></div> : null}
+            {!props.consist_like && !props.load_like ? <div className="text-secondary empty-list"><h4>No Dislikes available</h4></div> : null}
         </React.Fragment>
     )
 }
